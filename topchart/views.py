@@ -14,7 +14,7 @@ def index(request):
 
     users = User.objects.order_by("placing").all()
     if not admin:
-        users = users.filter(placing__gt=0)[:10]
+        users = users.filter(points__gt=0)[:10]
 
     if search != "":
         name_filtered = users.filter(name__icontains=search)
