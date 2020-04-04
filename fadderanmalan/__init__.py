@@ -1,1 +1,1 @@
-default_app_config = 'fadderanmalan.apps.FadderanmalanConfig'
+default_app_config = "fadderanmalan.apps.FadderanmalanConfig"

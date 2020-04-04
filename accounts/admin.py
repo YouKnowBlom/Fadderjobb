@@ -96,7 +96,7 @@ class UserAdmin(admin.ModelAdmin):
     ]
 
     def get_ordering(self, request):
-        return ['username']
+        return ["username"]
 
     def url(self, obj):
         url = obj.url()
@@ -104,6 +104,7 @@ class UserAdmin(admin.ModelAdmin):
         if not url:
             return ""
         return format_html("<a href='{url}'>{url}</a>", url=obj.url())
+
     url.short_description = "URL"
 
     def equipment(self, obj):

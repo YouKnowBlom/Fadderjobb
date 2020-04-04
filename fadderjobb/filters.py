@@ -1,9 +1,12 @@
-from django.contrib.admin.filters import AllValuesFieldListFilter, RelatedFieldListFilter
+from django.contrib.admin.filters import (
+    AllValuesFieldListFilter,
+    RelatedFieldListFilter,
+)
 
 
 class DropdownFilter(AllValuesFieldListFilter):
-    template = 'admin/dropdown_filter.html'
+    template = "admin/dropdown_filter.html"
 
 
 class DropdownFilterRelated(RelatedFieldListFilter):
-    template = 'admin/dropdown_filter.html'
+    template = "admin/dropdown_filter.html"

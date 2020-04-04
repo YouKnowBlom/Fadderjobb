@@ -9,15 +9,16 @@ from .exceptions import UserError
 
 
 def job_list(request):
-    jobs = Job.objects.order_by("start_date") \
-        .filter(~Job.is_hidden_query_filter())
+    jobs = Job.objects.order_by("start_date").filter(~Job.is_hidden_query_filter())
 
     jobs = misc_utils.filter_jobs_for_user(request.user, jobs)
 
     search = request.GET.get("search", "")
 
     if search != "":
-        jobs = jobs.filter(Q(name__icontains=search.lower()) | Q(description__icontains=search.lower()))
+        jobs = jobs.filter(
+            Q(name__icontains=search.lower()) | Q(description__icontains=search.lower())
+        )
 
     full = request.GET.get("filter-full", None)
 
@@ -29,9 +30,9 @@ def job_list(request):
     signedup = request.GET.get("filter-signedup", None)
 
     if signedup == "1":
-        jobs = jobs.filter(id__in=request.user.jobs.values_list('id', flat=True))
+        jobs = jobs.filter(id__in=request.user.jobs.values_list("id", flat=True))
     elif signedup == "0":
-        jobs = jobs.exclude(id__in=request.user.jobs.values_list('id', flat=True))
+        jobs = jobs.exclude(id__in=request.user.jobs.values_list("id", flat=True))
 
     enterqueue = request.GET.get("filter-enterqueue", None)
 
@@ -50,15 +51,19 @@ def job_list(request):
 
     day_grouped = Job.group_by_date(jobs)
 
-    return render(request, "fadderanmalan/job_list.html", dict(
-        day_grouped=day_grouped,
-        jobtypes=(t.name for t in Type.objects.all()),
-        filter_search=search,
-        filter_signedup=signedup,
-        filter_full=full,
-        filter_enterqueue=enterqueue,
-        filter_jobtype=jobtype
-    ))
+    return render(
+        request,
+        "fadderanmalan/job_list.html",
+        dict(
+            day_grouped=day_grouped,
+            jobtypes=(t.name for t in Type.objects.all()),
+            filter_search=search,
+            filter_signedup=signedup,
+            filter_full=full,
+            filter_enterqueue=enterqueue,
+            filter_jobtype=jobtype,
+        ),
+    )
 
 
 def job_details(request, slug):
@@ -71,7 +76,9 @@ def job_details(request, slug):
 
             if not request.user.is_superuser:
                 # Get the intersection of allowed groups and the user's groups
-                common_groups = set(job.only_visible_to.all()) & set(request.user.groups.all())
+                common_groups = set(job.only_visible_to.all()) & set(
+                    request.user.groups.all()
+                )
 
                 # If there are no groups, raise 404
                 if not common_groups:
@@ -88,7 +95,11 @@ def job_details(request, slug):
     context = dict(job=job)
 
     if not request.user.is_anonymous:
-        hint_text, button_text, button_name = reg_utils.generate_registration_text(request, job)
-        context.update(hint_text=hint_text, button_text=button_text, button_name=button_name)
+        hint_text, button_text, button_name = reg_utils.generate_registration_text(
+            request, job
+        )
+        context.update(
+            hint_text=hint_text, button_text=button_text, button_name=button_name
+        )
 
     return render(request, "fadderanmalan/job_details.html", context)

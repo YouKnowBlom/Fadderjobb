@@ -16,12 +16,11 @@ class CustomModelChoiceIterator(forms.models.ModelChoiceIterator):
 # In order to apply the custom iterator the entire field has to be sub-classed
 class CustomModelChoiceField(forms.models.ModelMultipleChoiceField):
     def _get_choices(self):
-        if hasattr(self, '_choices'):
+        if hasattr(self, "_choices"):
             return self._choices
         return CustomModelChoiceIterator(self)
 
-    choices = property(_get_choices,
-                       forms.MultipleChoiceField._set_choices)
+    choices = property(_get_choices, forms.MultipleChoiceField._set_choices)
 
 
 class TradeForm(forms.ModelForm):
@@ -36,11 +35,15 @@ class TradeForm(forms.ModelForm):
         self.sender = sender
         self.receiver = receiver
 
-        sender_jobs = sender.jobs.exclude(id__in=receiver.jobs.values_list('id', flat=True))
+        sender_jobs = sender.jobs.exclude(
+            id__in=receiver.jobs.values_list("id", flat=True)
+        )
         sender_jobs = misc_utils.filter_jobs_for_user(receiver, sender_jobs)
         sender_jobs = sender_jobs.filter(~Job.is_locked_query_filter())
 
-        receiver_jobs = receiver.jobs.exclude(id__in=sender.jobs.values_list('id', flat=True))
+        receiver_jobs = receiver.jobs.exclude(
+            id__in=sender.jobs.values_list("id", flat=True)
+        )
         receiver_jobs = misc_utils.filter_jobs_for_user(sender, receiver_jobs)
         receiver_jobs = receiver_jobs.filter(~Job.is_locked_query_filter())
 
@@ -63,33 +66,41 @@ class TradeForm(forms.ModelForm):
         # are not registered to. I also added the for-loops below as a safety-measure, since I don't trust this
         # behavior.
         if "sent" not in self.cleaned_data or "requested" not in self.cleaned_data:
-            raise forms.ValidationError("Något gick fel, troligtvis har du eller %s avregistrerat sig på något "
-                                        "av jobben som inkluderades i bytet." % self.receiver,
-                                        code="unknown_error")
+            raise forms.ValidationError(
+                "Något gick fel, troligtvis har du eller %s avregistrerat sig på något "
+                "av jobben som inkluderades i bytet." % self.receiver,
+                code="unknown_error",
+            )
 
         # Check that at least one job is included in the trade
         if not (self.cleaned_data["sent"] or self.cleaned_data["requested"]):
-            raise forms.ValidationError("Inga jobb valda.",
-                                        code="no_jobs")
+            raise forms.ValidationError("Inga jobb valda.", code="no_jobs")
 
         # Check that sender is registered to all sent jobs
         for job in self.cleaned_data.get("sent").all():
             try:
                 job_user = JobUser.get(job, self.sender)
                 if job_user.job.is_locked():
-                    raise forms.ValidationError("Jobbet %s är låst." % job,
-                                                code="job_locked")
+                    raise forms.ValidationError(
+                        "Jobbet %s är låst." % job, code="job_locked"
+                    )
             except JobUser.DoesNotExist:
-                raise forms.ValidationError("Du är inte registrerad på jobbet %s." % job,
-                                            code="sender_not_registered")
+                raise forms.ValidationError(
+                    "Du är inte registrerad på jobbet %s." % job,
+                    code="sender_not_registered",
+                )
 
         # Check that receiver is registered to all requested jobs
         for job in self.cleaned_data.get("requested").all():
             try:
                 job_user = JobUser.get(job, self.receiver)
                 if job_user.job.is_locked():
-                    raise forms.ValidationError("Jobbet %s är låst." % job,
-                                                code="job_locked")
+                    raise forms.ValidationError(
+                        "Jobbet %s är låst." % job, code="job_locked"
+                    )
             except JobUser.DoesNotExist:
-                raise forms.ValidationError("%s är inte längre registrerad på jobbet %s." % (self.receiver, job),
-                                            code="receiver_not_registered")
+                raise forms.ValidationError(
+                    "%s är inte längre registrerad på jobbet %s."
+                    % (self.receiver, job),
+                    code="receiver_not_registered",
+                )

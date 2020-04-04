@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login as django_login, logout as django_logout, get_user_model
+from django.contrib.auth import (
+    login as django_login,
+    logout as django_logout,
+    get_user_model,
+)
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import Http404
@@ -18,10 +22,14 @@ User = get_user_model()
 
 def profile(request, username):
     if username == request.user.username:
-        return render(request, "accounts/my_profile.html", dict(
-            non_returned_equipment_ownerships=request.user.equipments.all(),
-            day_grouped=Job.group_by_date(request.user.jobs.all()),
-        ))
+        return render(
+            request,
+            "accounts/my_profile.html",
+            dict(
+                non_returned_equipment_ownerships=request.user.equipments.all(),
+                day_grouped=Job.group_by_date(request.user.jobs.all()),
+            ),
+        )
 
     try:
         user = User.objects.get(username=username)
@@ -40,11 +48,11 @@ def profile(request, username):
         except Trade.DoesNotExist:
             trade = None
 
-    return render(request, "accounts/profile.html", dict(
-        user=user,
-        day_grouped=day_grouped,
-        trade=trade,
-    ))
+    return render(
+        request,
+        "accounts/profile.html",
+        dict(user=user, day_grouped=day_grouped, trade=trade,),
+    )
 
 
 def my_profile(request):
@@ -67,23 +75,27 @@ def edit_profile(request):
 
             request.user.save()
 
-            messages.add_message(request, messages.INFO,
-                                 "Din profil har uppdaterats. "
-                                 "<a href='%s'>Se dina ändringar.</a>" % reverse("accounts:my_profile"))
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Din profil har uppdaterats. "
+                "<a href='%s'>Se dina ändringar.</a>" % reverse("accounts:my_profile"),
+            )
         else:
-            messages.add_message(request, messages.ERROR,
-                                 "Ett eller flera problem uppstod.")
+            messages.add_message(
+                request, messages.ERROR, "Ett eller flera problem uppstod."
+            )
     else:
-        form = FadderEditForm(initial=dict(
-            email=request.user.email,
-            phone_number=request.user.phone_number,
-            motto=request.user.motto,
-            name=request.user.name,
-        ))
+        form = FadderEditForm(
+            initial=dict(
+                email=request.user.email,
+                phone_number=request.user.phone_number,
+                motto=request.user.motto,
+                name=request.user.name,
+            )
+        )
 
-    return render(request, "accounts/edit_profile.html", dict(
-        form=form,
-    ))
+    return render(request, "accounts/edit_profile.html", dict(form=form,))
 
 
 @login_required

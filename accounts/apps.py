@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class AccountsConfig(AppConfig):
-    name = 'accounts'
+    name = "accounts"
 
     def ready(self):
         try:
@@ -10,4 +10,3 @@ class AccountsConfig(AppConfig):
             from . import cronjobs
         except ImportError:
             pass
-

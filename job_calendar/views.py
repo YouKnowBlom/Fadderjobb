@@ -12,7 +12,7 @@ from accounts.models import User
 
 
 class JobFeed(ICalFeed):
-    product_id = '-//fadderjobb.staben.info/calendar'
+    product_id = "-//fadderjobb.staben.info/calendar"
     timezone = str(get_current_timezone())
     file_name = "jobs.ics"
 

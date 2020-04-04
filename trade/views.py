@@ -21,9 +21,11 @@ def start(request, receiver_username):
     try:
         Trade.get_trade(request.user, receiver)
 
-        return render(request, "400.html", dict(
-            exception="Ett byte mellan dig och den här personen existerar redan."
-        ))
+        return render(
+            request,
+            "400.html",
+            dict(exception="Ett byte mellan dig och den här personen existerar redan."),
+        )
     except Trade.DoesNotExist:
         pass
 
@@ -48,20 +50,23 @@ def start(request, receiver_username):
             trade.save()
             trade.notify_receiver()
 
-            messages.add_message(request, messages.INFO,
-                                 "Bytesförfrågan har skickats på mail till %s." % receiver.username)
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Bytesförfrågan har skickats på mail till %s." % receiver.username,
+            )
 
             return redirect(reverse("trade:see", args=[receiver_username]))
         else:
-            messages.add_message(request, messages.ERROR,
-                                 "Ett eller flera problem uppstod.")
+            messages.add_message(
+                request, messages.ERROR, "Ett eller flera problem uppstod."
+            )
     else:
         form = TradeForm(sender=request.user, receiver=receiver)
 
-    return render(request, "trade/start.html", dict(
-        trade_form=form,
-        receiver=receiver,
-    ))
+    return render(
+        request, "trade/start.html", dict(trade_form=form, receiver=receiver,)
+    )
 
 
 @login_required
@@ -74,18 +79,14 @@ def see_trade(request, other_username):
     try:
         trade = Trade.get_trade(request.user, other)
     except Trade.DoesNotExist:
-        raise Http404("Bytesförfrågan hittades ej. Användaren som skickade den kan ha avbrutit bytet.")
+        raise Http404(
+            "Bytesförfrågan hittades ej. Användaren som skickade den kan ha avbrutit bytet."
+        )
 
     if trade.sender == request.user:
-        return render(request, "trade/sent.html", dict(
-            other=other,
-            trade=trade
-        ))
+        return render(request, "trade/sent.html", dict(other=other, trade=trade))
     else:
-        return render(request, "trade/complete.html", dict(
-            other=other,
-            trade=trade,
-        ))
+        return render(request, "trade/complete.html", dict(other=other, trade=trade,))
 
 
 @login_required
@@ -110,10 +111,11 @@ def change_trade(request, other_username):
             if canceled:
                 trade.cancel()
 
-            return render(request, "trade/confirmation.html", dict(
-                other=other,
-                canceled=canceled,
-            ))
+            return render(
+                request,
+                "trade/confirmation.html",
+                dict(other=other, canceled=canceled,),
+            )
         else:
             accepted = "accept" in request.POST
             denied = "deny" in request.POST
@@ -123,8 +125,8 @@ def change_trade(request, other_username):
             elif denied:
                 trade.deny()
 
-            return render(request, "trade/confirmation.html", dict(
-                other=other,
-                accepted=accepted,
-                denied=denied,
-            ))
+            return render(
+                request,
+                "trade/confirmation.html",
+                dict(other=other, accepted=accepted, denied=denied,),
+            )

@@ -15,10 +15,11 @@ class TradeAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({'help_text': 'Sökbara fält: sändare, mottagare.'})
+        extra_context.update({"help_text": "Sökbara fält: sändare, mottagare."})
 
-        return super(TradeAdmin, self)\
-            .changelist_view(request, extra_context=extra_context)
+        return super(TradeAdmin, self).changelist_view(
+            request, extra_context=extra_context
+        )
 
     def response_change(self, request, obj):
         if "_accept_trade" in request.POST:
@@ -29,5 +30,6 @@ class TradeAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(".")
 
         return super().response_change(request, obj)
+
 
 admin.site.register(Trade, TradeAdmin)

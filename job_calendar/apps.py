@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class JobCalendarConfig(AppConfig):
-    name = 'job_calendar'
+    name = "job_calendar"

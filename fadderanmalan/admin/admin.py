@@ -6,7 +6,14 @@ from django.utils.html import format_html
 
 from django.contrib.admin.filters import BooleanFieldListFilter
 
-from fadderanmalan.models import Type, EnterQueue, Job, Equipment, EquipmentOwnership, ActionLog
+from fadderanmalan.models import (
+    Type,
+    EnterQueue,
+    Job,
+    Equipment,
+    EquipmentOwnership,
+    ActionLog,
+)
 from accounts.models import User
 
 from .actions import job_set_locked, job_set_hidden, job_notify_registered
@@ -40,11 +47,15 @@ class EQInline(admin.TabularInline):
     extra = 0
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        field = super(EQInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        field = super(EQInline, self).formfield_for_foreignkey(
+            db_field, request, **kwargs
+        )
 
         if db_field.name == "user":
             if request.obj_ is not None:
-                field.queryset = field.queryset.filter(~Q(id__in=request.obj_.users.all()))
+                field.queryset = field.queryset.filter(
+                    ~Q(id__in=request.obj_.users.all())
+                )
             else:
                 field.queryset = field.queryset.none()
 
@@ -86,7 +97,13 @@ class JobAdmin(admin.ModelAdmin):
 
     actions = (job_set_locked, job_set_hidden, job_notify_registered)
 
-    list_filter = ("locked", "hidden", "types", ("start_date", DropdownFilter), "only_visible_to")
+    list_filter = (
+        "locked",
+        "hidden",
+        "types",
+        ("start_date", DropdownFilter),
+        "only_visible_to",
+    )
 
     search_fields = ("name",)
 
@@ -103,7 +120,7 @@ class JobAdmin(admin.ModelAdmin):
         return actions
 
     def get_ordering(self, request):
-        return ['name']
+        return ["name"]
 
     def url(self, obj):
         url = obj.url()
@@ -111,6 +128,7 @@ class JobAdmin(admin.ModelAdmin):
         if not url:
             return ""
         return format_html("<a href='{url}'>{url}</a>", url=obj.url())
+
     url.short_description = "URL"
 
     def registered(self, obj):
@@ -118,10 +136,11 @@ class JobAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({'help_text': 'Sökbara fält: jobb-namn.'})
+        extra_context.update({"help_text": "Sökbara fält: jobb-namn."})
 
-        return super(JobAdmin, self)\
-            .changelist_view(request, extra_context=extra_context)
+        return super(JobAdmin, self).changelist_view(
+            request, extra_context=extra_context
+        )
 
     def response_change(self, request, obj: Job):
         if "_dequeue" in request.POST:
@@ -130,22 +149,37 @@ class JobAdmin(admin.ModelAdmin):
             elif not obj.has_enter_queue():
                 messages.add_message(request, messages.ERROR, "Job has no enterqueue.")
             elif "fadderanmalan.change_job" not in request.user.get_all_permissions():
-                messages.add_message(request, messages.ERROR, "You have insufficient permissions.")
+                messages.add_message(
+                    request, messages.ERROR, "You have insufficient permissions."
+                )
             else:
                 added = obj.dequeue()
                 added = [user.username for user in added]
 
                 if len(added) > 0:
-                    messages.add_message(request, messages.INFO, "Users '%s' dequeued." % "', '".join(added))
+                    messages.add_message(
+                        request,
+                        messages.INFO,
+                        "Users '%s' dequeued." % "', '".join(added),
+                    )
                 else:
-                    messages.add_message(request, messages.ERROR, "No users to dequeue.")
+                    messages.add_message(
+                        request, messages.ERROR, "No users to dequeue."
+                    )
 
             return HttpResponseRedirect(".")
 
         if "_notify_registered" in request.POST:
-            return render(request, "admin/fadderanmalan/job/notify_registered_action.html", dict(
-                self.admin_site.each_context(request),
-                jobs=[obj], title="Send notification", single_job=obj))
+            return render(
+                request,
+                "admin/fadderanmalan/job/notify_registered_action.html",
+                dict(
+                    self.admin_site.each_context(request),
+                    jobs=[obj],
+                    title="Send notification",
+                    single_job=obj,
+                ),
+            )
 
         return super().response_change(request, obj)
 
@@ -156,7 +190,7 @@ class JobAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(JobAdmin, self).get_queryset(request)
-        qs = qs.annotate(user_count=Count('users'))
+        qs = qs.annotate(user_count=Count("users"))
         return qs
 
     def slots_taken(self, obj: Job):
@@ -174,10 +208,11 @@ class EnterQueueAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({'help_text': 'Sökbara fält: liu-id, jobb-namn.'})
+        extra_context.update({"help_text": "Sökbara fält: liu-id, jobb-namn."})
 
-        return super(EnterQueueAdmin, self)\
-            .changelist_view(request, extra_context=extra_context)
+        return super(EnterQueueAdmin, self).changelist_view(
+            request, extra_context=extra_context
+        )
 
 
 class EquipmentAdmin(admin.ModelAdmin):
@@ -188,17 +223,23 @@ class EquipmentAdmin(admin.ModelAdmin):
     search_fields = ("name", "size")
 
     def render_change_form(self, request, context, *args, **kwargs):
-        context.update({'help_text': 'Generella utrustningar. Skapa dessa innan utdelning.'})
+        context.update(
+            {"help_text": "Generella utrustningar. Skapa dessa innan utdelning."}
+        )
 
-        return super(EquipmentAdmin, self)\
-            .render_change_form(request, context, *args, **kwargs)
+        return super(EquipmentAdmin, self).render_change_form(
+            request, context, *args, **kwargs
+        )
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({'help_text': 'Generella utrustningar. Skapa dessa innan utdelning.'})
+        extra_context.update(
+            {"help_text": "Generella utrustningar. Skapa dessa innan utdelning."}
+        )
 
-        return super(EquipmentAdmin, self)\
-            .changelist_view(request, extra_context=extra_context)
+        return super(EquipmentAdmin, self).changelist_view(
+            request, extra_context=extra_context
+        )
 
 
 class EquipmentOwnershipAdmin(admin.ModelAdmin):
@@ -221,17 +262,19 @@ class EquipmentOwnershipAdmin(admin.ModelAdmin):
             return {}
 
     def render_change_form(self, request, context, *args, **kwargs):
-        context.update({'help_text': ''})
+        context.update({"help_text": ""})
 
-        return super(EquipmentOwnershipAdmin, self)\
-            .render_change_form(request, context, *args, **kwargs)
+        return super(EquipmentOwnershipAdmin, self).render_change_form(
+            request, context, *args, **kwargs
+        )
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context.update({'help_text': 'Sökbara fält: liu-id, jobb-namn.'})
+        extra_context.update({"help_text": "Sökbara fält: liu-id, jobb-namn."})
 
-        return super(EquipmentOwnershipAdmin, self)\
-            .changelist_view(request, extra_context=extra_context)
+        return super(EquipmentOwnershipAdmin, self).changelist_view(
+            request, extra_context=extra_context
+        )
 
     def name(self, obj):
         return obj.equipment.name

@@ -17,6 +17,10 @@ def guide(request):
             request.user.read_guide = True
             request.user.save()
 
-            messages.add_message(request, messages.INFO, "Du har nu markerat att du har läst guiden. Bra jobbat!")
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Du har nu markerat att du har läst guiden. Bra jobbat!",
+            )
 
             return redirect("index")
