@@ -192,6 +192,7 @@ CAS_RESPONSE_CALLBACKS = [
     "accounts.cas_callbacks.add_email",
     "accounts.cas_callbacks.set_admin",
 ]
+CAS_CUSTOM_FORBIDDEN = "accounts:loginfailed"
 
 # Live settings
 # https://github.com/jazzband/django-constance/

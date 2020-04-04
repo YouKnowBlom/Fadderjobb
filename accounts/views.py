@@ -20,6 +20,10 @@ from trade.models import Trade
 User = get_user_model()
 
 
+def loginfailed(request):
+    return render(request, "accounts/loginfailed.html")
+
+
 def profile(request, username):
     if username == request.user.username:
         return render(

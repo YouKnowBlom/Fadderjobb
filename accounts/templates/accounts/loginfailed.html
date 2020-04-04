@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load sass_tags %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% sass_src 'sass/index.sass' %}">
+{% endblock head %}
+
+{% block content %}
+    <h1>Du kunde inte logga in</h1>
+
+    <p>
+        Det verkar som att du inte är registrerad som fadder i systemet.
+        Om du är fadder på D-sektionen och inte kan logga in, kontakta
+        <a href="mailto:fadderansvarig@staben.info" target="_blank">fadderansvarig</a>.
+    </p>
+{% endblock content %}
