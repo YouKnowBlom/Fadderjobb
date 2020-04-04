@@ -1,0 +1,16 @@
+<p>Hej!</p>
+
+<p>Du har nu registrerat dig på jobbet '{{ job.name }}' under Nolle-P.</p>
+<a href="{{ job.url }}">Se jobbet här</a>
+<br>
+
+{% if job.description %}
+<h3>Jobbets beskrivning:</h3>
+{{ job.description }}
+{% endif %}
+
+<p>Kom i tid! Om du inte kan närvara på jobbpasset MÅSTE du antingen byta bort det eller avregistrera dig från det.</p>
+
+<p>Om du har några frågor kan du kontakta Fadderansvarig på fadderansvarig@staben.info.</p>
+
+<p>Tagga Nolle-P!</p>

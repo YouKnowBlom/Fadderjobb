@@ -10,11 +10,9 @@ from fadderjobb.utils import notify_user
 
 
 def _delete_trades(job_user: JobUser):
-    Trade.objects\
-        .filter(Q(sender=job_user.user) | Q(receiver=job_user.user))\
-        .filter(Q(sent=job_user.job) | Q(requested=job_user.job))\
-        .exclude(completed=True)\
-        .delete()
+    Trade.objects.filter(Q(sender=job_user.user) | Q(receiver=job_user.user)).filter(
+        Q(sent=job_user.job) | Q(requested=job_user.job)
+    ).exclude(completed=True).delete()
 
 
 def _delete_EQ(job_user):
@@ -26,13 +24,18 @@ def post_registration(sender, instance: JobUser, created, **kwargs):
     if not created:
         return
 
-    log = ActionLog(job=instance.job, user=instance.user, type=ActionLog.TYPES.REGISTRATION_CREATE.value)
+    log = ActionLog(
+        job=instance.job,
+        user=instance.user,
+        type=ActionLog.TYPES.REGISTRATION_CREATE.value,
+    )
     log.save()
 
-    notify_user(instance.user, template="job_registration", template_context=dict(
-        job=instance.job,
-        user=instance.user
-    ))
+    notify_user(
+        instance.user,
+        template="fadderanmalan/email/job_registration",
+        template_context=dict(job=instance.job, user=instance.user),
+    )
 
     instance.user.update_points()
     accounts.utils.update_user_placings()
@@ -43,7 +46,11 @@ def post_registration(sender, instance: JobUser, created, **kwargs):
 
 @receiver(pre_delete, sender=JobUser)
 def pre_deregistration(sender, instance: JobUser, **kwargs):
-    log = ActionLog(job=instance.job, user=instance.user, type=ActionLog.TYPES.REGISTRATION_DELETE.value)
+    log = ActionLog(
+        job=instance.job,
+        user=instance.user,
+        type=ActionLog.TYPES.REGISTRATION_DELETE.value,
+    )
     log.save()
 
     _delete_trades(instance)
@@ -61,11 +68,19 @@ def post_create_eq(sender, instance: EnterQueue, created, **kwargs):
     if not created:
         return
 
-    log = ActionLog(job=instance.job, user=instance.user, type=ActionLog.TYPES.ENTER_QUEUE_CREATE.value)
+    log = ActionLog(
+        job=instance.job,
+        user=instance.user,
+        type=ActionLog.TYPES.ENTER_QUEUE_CREATE.value,
+    )
     log.save()
 
 
 @receiver(pre_delete, sender=EnterQueue)
 def pre_delete_eq(sender, instance: EnterQueue, **kwargs):
-    log = ActionLog(job=instance.job, user=instance.user, type=ActionLog.TYPES.ENTER_QUEUE_DELETE.value)
+    log = ActionLog(
+        job=instance.job,
+        user=instance.user,
+        type=ActionLog.TYPES.ENTER_QUEUE_DELETE.value,
+    )
     log.save()

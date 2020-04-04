@@ -14,12 +14,15 @@ def notify_registered(request, jobs, message):
                 user_jobs[user] = [job.name]
 
     for user, registered_jobs in user_jobs.items():
-        notify_user(user, template="job_notification", template_context=dict(
-            jobs=registered_jobs,
-            user=user,
-            admin=request.user,
-            message=message,
-        ))
+        notify_user(
+            user,
+            template="fadderanmalan/email/job_notification",
+            template_context=dict(
+                jobs=registered_jobs, user=user, admin=request.user, message=message,
+            ),
+        )
 
     job_names = ", ".join([job.name for job in jobs])
-    messages.add_message(request, messages.INFO, "Notified users registered to jobs %s." % job_names)
+    messages.add_message(
+        request, messages.INFO, "Notified users registered to jobs %s." % job_names
+    )

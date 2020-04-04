@@ -24,7 +24,8 @@ def notify_jobs_tomorrow(num):
                 user_jobs[user] = [(job, job_user)]
 
     for user, vals in user_jobs.items():
-        notify_user(user, template="job_reminder", template_context=dict(
-            user=user,
-            jobs=[v[0] for v in vals],
-        ))
+        notify_user(
+            user,
+            template="fadderanmalan/email/job_reminder",
+            template_context=dict(user=user, jobs=[v[0] for v in vals],),
+        )

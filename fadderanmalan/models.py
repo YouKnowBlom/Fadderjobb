@@ -28,8 +28,13 @@ class Equipment(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
 
-    size = models.CharField(max_length=10, null=True, blank=True, help_text="Frivillig storlek på utrustningen. "
-                                                                            "Användbart för t.ex. t-shirts.")
+    size = models.CharField(
+        max_length=10,
+        null=True,
+        blank=True,
+        help_text="Frivillig storlek på utrustningen. "
+        "Användbart för t.ex. t-shirts.",
+    )
 
     def __str__(self):
         if self.size:
@@ -40,12 +45,24 @@ class Equipment(models.Model):
 class EquipmentOwnership(models.Model):
     dispensed_at = models.DateTimeField(default=timezone.now)
 
-    job = models.ForeignKey("Job", on_delete=models.SET_NULL, related_name="equipments",
-                            null=True, blank=True, help_text="Vilket jobb gäller utdelningen? Kan vara tom.")
+    job = models.ForeignKey(
+        "Job",
+        on_delete=models.SET_NULL,
+        related_name="equipments",
+        null=True,
+        blank=True,
+        help_text="Vilket jobb gäller utdelningen? Kan vara tom.",
+    )
 
-    equipment = models.ForeignKey("Equipment", on_delete=models.CASCADE, related_name="ownerships")
-    fadder = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="equipments",
-                               verbose_name="Fadder")
+    equipment = models.ForeignKey(
+        "Equipment", on_delete=models.CASCADE, related_name="ownerships"
+    )
+    fadder = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="equipments",
+        verbose_name="Fadder",
+    )
 
     def __str__(self):
         return "%s | %s" % (self.equipment, self.fadder)
@@ -55,10 +72,12 @@ class EnterQueue(models.Model):
     created = models.DateField(editable=False)
 
     job = models.ForeignKey("Job", on_delete=models.CASCADE, related_name="enter_queue")
-    user = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="enter_queue")
+    user = models.ForeignKey(
+        "accounts.User", on_delete=models.CASCADE, related_name="enter_queue"
+    )
 
     class Meta:
-        unique_together = [['job', 'user']]
+        unique_together = [["job", "user"]]
 
     def __str__(self):
         return " | ".join([self.job.name, self.user.username])
@@ -92,10 +111,11 @@ class EnterQueue(models.Model):
         self.delete()
         self.job.save()
 
-        notify_user(self.user, template="job_enterqueue", template_context=dict(
-            job=self.job,
-            user=self.user
-        ))
+        notify_user(
+            self.user,
+            template="fadderanmalan/email/job_enterqueue",
+            template_context=dict(job=self.job, user=self.user),
+        )
 
 
 def default_locked_after():
@@ -128,35 +148,53 @@ class Job(models.Model):
     start_date = models.DateField(help_text="Vilket datum jobbet börjar.")
     end_date = models.DateField(help_text="Vilket datum jobbet slutar.")
 
-    start_time = models.TimeField(help_text="När jobbet ska börja.", default=default_start)
+    start_time = models.TimeField(
+        help_text="När jobbet ska börja.", default=default_start
+    )
     end_time = models.TimeField(help_text="När jobbet ska sluta.", default=default_end)
 
     description = models.TextField(null=True, blank=True)
     points = models.IntegerField()
     slots = models.IntegerField()
 
-    hidden = models.BooleanField(help_text="Om jobbet ska döljas från frontend:en. "
-                                           "Överskrider datumen nedan")
-    hidden_after = models.DateField(default=default_hidden_after,
-                                    help_text="Dagen EFTER detta datum kommer jobbet att döljas.")
-    hidden_until = models.DateField(default=default_hidden_until,
-                                    help_text="Jobbet kommer att visas FRÅN OCH MED detta datum.")
+    hidden = models.BooleanField(
+        help_text="Om jobbet ska döljas från frontend:en. " "Överskrider datumen nedan"
+    )
+    hidden_after = models.DateField(
+        default=default_hidden_after,
+        help_text="Dagen EFTER detta datum kommer jobbet att döljas.",
+    )
+    hidden_until = models.DateField(
+        default=default_hidden_until,
+        help_text="Jobbet kommer att visas FRÅN OCH MED detta datum.",
+    )
 
-    locked = models.BooleanField(help_text="Om jobbet ska vara låst. "
-                                           "Överskrider datumen nedan.")
-    locked_after = models.DateField(default=default_locked_after,
-                                    help_text="Dagen EFTER detta datum kommer jobbet att låsas.")
-    locked_until = models.DateField(default=default_locked_until,
-                                    help_text="Jobbet kommer att låsas upp FRÅN OCH MED detta datum.")
+    locked = models.BooleanField(
+        help_text="Om jobbet ska vara låst. " "Överskrider datumen nedan."
+    )
+    locked_after = models.DateField(
+        default=default_locked_after,
+        help_text="Dagen EFTER detta datum kommer jobbet att låsas.",
+    )
+    locked_until = models.DateField(
+        default=default_locked_until,
+        help_text="Jobbet kommer att låsas upp FRÅN OCH MED detta datum.",
+    )
 
     slug = models.SlugField(max_length=100, null=True, blank=True)
 
     types = models.ManyToManyField("Type", blank=True)
-    users = models.ManyToManyField("accounts.User", blank=True, related_name="jobs", through="JobUser")
+    users = models.ManyToManyField(
+        "accounts.User", blank=True, related_name="jobs", through="JobUser"
+    )
 
-    only_visible_to = models.ManyToManyField("auth.Group", blank=True, related_name="jobs",
-                                             help_text="Om satt till en eller flera grupper kommer jobbet endast "
-                                                       "att visas för användare som tillhör minst en av grupperna.")
+    only_visible_to = models.ManyToManyField(
+        "auth.Group",
+        blank=True,
+        related_name="jobs",
+        help_text="Om satt till en eller flera grupper kommer jobbet endast "
+        "att visas för användare som tillhör minst en av grupperna.",
+    )
 
     def __str__(self):
         return self.name
@@ -230,12 +268,16 @@ class Job(models.Model):
     @staticmethod
     def is_hidden_query_filter():
         today = timezone.now().date()
-        return Q(hidden=True) | ~(Q(hidden_until__lte=today) & Q(hidden_after__gte=today))
+        return Q(hidden=True) | ~(
+            Q(hidden_until__lte=today) & Q(hidden_after__gte=today)
+        )
 
     @staticmethod
     def is_locked_query_filter():
         today = timezone.now().date()
-        return Q(locked=True) | ~(Q(locked_until__lte=today) & Q(locked_after__gte=today))
+        return Q(locked=True) | ~(
+            Q(locked_until__lte=today) & Q(locked_after__gte=today)
+        )
 
     def has_enter_queue(self):
         return self.enter_queue.count() > 0
@@ -256,8 +298,12 @@ class JobUser(models.Model):
     job = models.ForeignKey("Job", on_delete=models.CASCADE)
     user = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
 
-    requested_give = models.ManyToManyField("accounts.User", blank=True, related_name="give_requests")
-    requested_take = models.ManyToManyField("accounts.User", blank=True, related_name="take_requests")
+    requested_give = models.ManyToManyField(
+        "accounts.User", blank=True, related_name="give_requests"
+    )
+    requested_take = models.ManyToManyField(
+        "accounts.User", blank=True, related_name="take_requests"
+    )
 
     def __str__(self):
         return " | ".join([str(self.job), str(self.user)])
@@ -291,7 +337,9 @@ class ActionLog(models.Model):
 
     created = models.DateTimeField(editable=False)
 
-    type = models.CharField(max_length=100, choices=[(tag.value, tag.value) for tag in ActionTypes])
+    type = models.CharField(
+        max_length=100, choices=[(tag.value, tag.value) for tag in ActionTypes]
+    )
 
     def __str__(self):
         return str(self.job)

@@ -1,0 +1,13 @@
+<p>Hej!</p>
+
+<p>Du får detta mail eftersom du är registrerad på passen:</p>
+
+<ul>
+    {% for job in jobs %}
+        <li><b>{{ job }}</b></li>
+    {% endfor %}
+</ul>
+
+<p>Administratören <b>{{admin}}</b> har skickat följande:</p>
+
+<p><i>{{message}}</i></p>

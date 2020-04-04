@@ -1,0 +1,7 @@
+Hej!
+
+Du får detta mail eftersom du är registrerad på passen {{jobs|join:", "}}.
+
+Administratören {{admin}} har skickat följande:
+
+{{message}}

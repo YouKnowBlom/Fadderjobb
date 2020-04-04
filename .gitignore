@@ -6,3 +6,6 @@ db.sqlite3
 /staticfiles
 credentials.json
 venv
+.venv
+.vscode
+email_logs

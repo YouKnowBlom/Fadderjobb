@@ -1,0 +1,15 @@
+Ett jobbyte har gått igenom.
+
+Användaren {{ sender }} har fått följande jobb:
+
+{% for job in sender_gets %}
+{{ job }}
+
+{% endfor %}
+
+Användaren {{ receiver }} har fått följande jobb:
+
+{% for job in receiver_gets %}
+{{ job }}
+
+{% endfor %}

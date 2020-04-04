@@ -1,0 +1,14 @@
+Hej!
+
+Du har nu registrerat dig på jobbet '{{ job.name }}' under Nolle-P. Se jobbet här: {{ job.url }}
+
+{% if job.description %}
+Jobbets beskrivning:
+{{ job.description }}
+{% endif %}
+
+Kom i tid! Om du inte kan närvara på jobbpasset MÅSTE du antingen byta bort det eller avregistrera dig från det. 
+
+Om du har några frågor kan du kontakta Fadderansvarig på fadderansvarig@staben.info.
+
+Tagga Nolle-P!

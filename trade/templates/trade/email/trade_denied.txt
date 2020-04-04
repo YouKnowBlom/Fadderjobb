@@ -1,0 +1,1 @@
+{{ receiver }} har tackat nej till ditt byte.

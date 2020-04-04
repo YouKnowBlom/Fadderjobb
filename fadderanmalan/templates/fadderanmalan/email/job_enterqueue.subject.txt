@@ -1,0 +1,1 @@
+Du har fått en plats på jobbet {{ job.name }}

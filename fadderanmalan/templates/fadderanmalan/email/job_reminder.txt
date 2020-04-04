@@ -1,0 +1,10 @@
+Hej!
+
+Du får detta mail eftersom du är registrerad på passen {{jobs|join:", "}}, som kommer ske imorgon.
+
+Glöm inte läsa passens beskrivningar inför imorgon:
+
+{% for job in jobs %}
+{{ job.url }}
+
+{% endfor %}

@@ -1,0 +1,1 @@
+Användaren {{ left }} har gett jobbet {{ job }} till användaren {{ joined }}.

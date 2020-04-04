@@ -18,8 +18,7 @@ def handle_register(request, job):
         except JobUser.DoesNotExist:
             JobUser.create(job, request.user)
 
-        messages.add_message(request, messages.INFO,
-                             "Du är nu registrerad på passet.")
+        messages.add_message(request, messages.INFO, "Du är nu registrerad på passet.")
 
     # Simply deregister the user from the job
     elif "_deregister" in request.POST:
@@ -47,9 +46,12 @@ def handle_register(request, job):
             eq = EnterQueue(job=job, user=request.user)
             eq.save()
 
-        messages.add_message(request, messages.INFO,
-                             "Du står nu i kö för passet. "
-                             "Om en fadder lämnar passet kommer du att få det.")
+        messages.add_message(
+            request,
+            messages.INFO,
+            "Du står nu i kö för passet. "
+            "Om en fadder lämnar passet kommer du att få det.",
+        )
 
     # Remove the user from the enter queue
     elif "_remove_eq" in request.POST:
@@ -57,8 +59,7 @@ def handle_register(request, job):
             eq = EnterQueue.objects.get(job=job, user=request.user)
             eq.delete()
 
-            messages.add_message(request, messages.INFO,
-                                 "Din köplats är nu borttagen.")
+            messages.add_message(request, messages.INFO, "Din köplats är nu borttagen.")
         except EnterQueue.DoesNotExist:
             raise UserError("Du var inte köad för att gå med i jobbet.")
 
@@ -69,15 +70,18 @@ def handle_register(request, job):
             JobUser.remove(job, request.user)
             eq.apply()
 
-            notify_group("JobSwapNotifications", template="admin_job_dequeued", template_context=dict(
-                left=request.user,
-                joined=eq.user,
-                job=job
-            ))
+            notify_group(
+                "JobSwapNotifications",
+                template="fadderanmalan/email/job_dequeued_notify_admin",
+                template_context=dict(left=request.user, joined=eq.user, job=job),
+            )
 
-            messages.add_message(request, messages.INFO,
-                                 "Du är nu avregistrerad från passet. %s tog din plats."
-                                 % eq.user.username)
+            messages.add_message(
+                request,
+                messages.INFO,
+                "Du är nu avregistrerad från passet. %s tog din plats."
+                % eq.user.username,
+            )
         except EnterQueue.DoesNotExist:
             raise UserError("Ingen annan köade för att registrera sig på jobbet.")
 
@@ -100,32 +104,24 @@ def generate_registration_text(request, job):
             "Jobbet är låst. Du kan inte interagera med passet längre, varesig du är registrerad eller inte. "
             "Om du är registrerad och vill avregistrera dig får du kontakta fadderansvarig.",
             "",
-            ""
+            "",
         )
 
     if registered_to_job:
-        return (
-            "",
-            "Avanmäl mig",
-            "_deregister"
-        )
+        return ("", "Avanmäl mig", "_deregister")
     else:
         if job.full():
             if queued_to_enter:
                 return (
                     "Du står i kö till jobbet. Vill du ta bort din köplats?",
                     "Ta bort min köplats",
-                    "_remove_eq"
+                    "_remove_eq",
                 )
             else:
                 return (
                     "Jobbet är fullsatt. Du kan ställa dig i kö till jobbet.",
                     "Ställ mig i kön",
-                    "_add_eq"
+                    "_add_eq",
                 )
         else:
-            return (
-                "",
-                "Anmäl mig",
-                "_register"
-            )
+            return ("", "Anmäl mig", "_register")

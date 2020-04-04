@@ -1,0 +1,1 @@
+Meddelande från {{admin}} angående jobb du är registrerad på

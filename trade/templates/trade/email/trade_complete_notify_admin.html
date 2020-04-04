@@ -1,0 +1,15 @@
+<p>Ett jobbyte har gått igenom.</p>
+
+<p>Användaren <b><a href="{{ sender.url }}">{{ sender }}</a></b> har fått följande jobb:</p>
+<ul>
+{% for job in sender_gets %}
+<li><b><a href="{{ job.url }}">{{ job }}</a></b></li>
+{% endfor %}
+</ul>
+
+<p>Användaren <b><a href="{{ receiver.url }}">{{ receiver }}</a></b> har fått följande jobb:</p>
+<ul>
+{% for job in receiver_gets %}
+<li><b><a href="{{ job.url }}">{{ job }}</a></b></li>
+{% endfor %}
+</ul>

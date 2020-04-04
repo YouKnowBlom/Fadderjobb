@@ -1,0 +1,3 @@
+Du har mottagit en bytesförfrågan från {{ sender }}.
+
+Se bytet här: {{ trade_url }}

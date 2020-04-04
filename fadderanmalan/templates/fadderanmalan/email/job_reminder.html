@@ -1,0 +1,11 @@
+<p>Hej!</p>
+
+<p>Du får detta mail eftersom du är registrerad på passen:</p>
+
+<ul>
+    {% for job in jobs %}
+        <li><a href="{{ job.url }}">{{ job.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<p>Glöm inte läsa passens beskrivningar inför imorgon.</p>

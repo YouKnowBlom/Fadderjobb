@@ -12,23 +12,34 @@ class Trade(models.Model):
     created = models.DateTimeField(default=timezone.now)
     completed = models.BooleanField(default=False)
 
-    sender = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="sent_trades")
-    receiver = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="received_trades")
+    sender = models.ForeignKey(
+        "accounts.User", on_delete=models.CASCADE, related_name="sent_trades"
+    )
+    receiver = models.ForeignKey(
+        "accounts.User", on_delete=models.CASCADE, related_name="received_trades"
+    )
 
-    sent = models.ManyToManyField("fadderanmalan.Job", related_name="sent_in_trades", blank=True)
-    requested = models.ManyToManyField("fadderanmalan.Job", related_name="requested_in_trades", blank=True)
+    sent = models.ManyToManyField(
+        "fadderanmalan.Job", related_name="sent_in_trades", blank=True
+    )
+    requested = models.ManyToManyField(
+        "fadderanmalan.Job", related_name="requested_in_trades", blank=True
+    )
 
     def __str__(self):
         return "%s -> %s" % (self.sender, self.receiver)
 
     def url(self):
-        return settings.DEFAULT_DOMAIN + \
-               reverse("trade:see", args=[self.sender.username])
+        return settings.DEFAULT_DOMAIN + reverse(
+            "trade:see", args=[self.sender.username]
+        )
 
     def notify_receiver(self):
-        notify_user(self.receiver, template="trade_received", template_context=dict(
-            sender=self.sender, trade_url=self.url()
-        ))
+        notify_user(
+            self.receiver,
+            template="trade/email/trade_received",
+            template_context=dict(sender=self.sender, trade_url=self.url()),
+        )
 
     def accept(self):
         # A Trade needs to be marked as completed before adding and removing of JobUsers since we don't want
@@ -50,23 +61,31 @@ class Trade(models.Model):
             JobUser.create(job=job, user=self.sender)
             JobUser.remove(job=job, user=self.receiver)
 
-        notify_user(self.sender, template="trade_accepted", template_context=dict(
-            receiver=self.receiver
-        ))
+        notify_user(
+            self.sender,
+            template="trade/email/trade_accepted",
+            template_context=dict(receiver=self.receiver),
+        )
 
-        notify_group("JobSwapNotifications", template="admin_jobs_traded", template_context=dict(
-            sender=self.sender,
-            receiver=self.receiver,
-            receiver_gets=receiver_gets,
-            sender_gets=sender_gets,
-        ))
+        notify_group(
+            "JobSwapNotifications",
+            template="trade/email/trade_complete_notify_admin",
+            template_context=dict(
+                sender=self.sender,
+                receiver=self.receiver,
+                receiver_gets=receiver_gets,
+                sender_gets=sender_gets,
+            ),
+        )
 
     def deny(self):
         self.delete()
 
-        notify_user(self.sender, template="trade_denied", template_context=dict(
-                        receiver=self.receiver
-                    ))
+        notify_user(
+            self.sender,
+            template="trade/email/trade_denied",
+            template_context=dict(receiver=self.receiver),
+        )
 
     def cancel(self):
         self.delete()
