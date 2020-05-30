@@ -26,4 +26,5 @@ class Command(BaseCommand):
             username = (fn[:3] + ln[:2] + str(fake.random_int(max=999))).lower()
             user, created = User.objects.get_or_create(username=username)
             user.name = f"{fn} {ln}"
+            user.email = f"{username}@student.liu.se"
             user.save()

@@ -1,0 +1,11 @@
+body.darkmode {
+  input[type=checkbox] {
+    &:checked + .job {
+      background-color: white;
+
+      * {
+        color: black !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@import "../constants.scss";
+
+body.darkmode {
+  form {
+    input, input:focus, textarea, textarea:focus {
+      background-color: $darkmode-input-background;
+      color: white;
+    }
+
+    .dropdown-item {
+      color: black !important;
+
+      &:hover {
+        color: white !important;
+      }
+    }
+  }
+}

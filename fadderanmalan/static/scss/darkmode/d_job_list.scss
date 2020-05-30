@@ -1,0 +1,8 @@
+@import "../../../../fadderjobb/static/scss/constants.scss";
+
+body.darkmode {
+  .dropdown-toggle {
+    background-color: $darkmode-input-background;
+    color: white;
+  }
+}

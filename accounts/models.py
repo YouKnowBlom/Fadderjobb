@@ -17,6 +17,15 @@ class _UserManager(UserManager):
         return self.get(**{case_insensitive_username_field: username})
 
 
+class BonusPoints(models.Model):
+    reason = models.CharField(max_length=100)
+    points = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.reason
+
+
 class User(AbstractUser):
     objects = _UserManager()
 
@@ -27,6 +36,7 @@ class User(AbstractUser):
 
     points = models.IntegerField(default=0)
     placing = models.IntegerField(blank=True, null=True)
+    bonus_points = models.ManyToManyField(BonusPoints, blank=True)
 
     def __str__(self):
         if self.name:
@@ -34,7 +44,11 @@ class User(AbstractUser):
         return self.username
 
     def update_points(self):
-        self.points = self.jobs.all().aggregate(Sum("points"))["points__sum"] or 0
+        job_points = self.jobs.all().aggregate(Sum("points"))["points__sum"] or 0
+        bonus_points = (
+            self.bonus_points.all().aggregate(Sum("points"))["points__sum"] or 0
+        )
+        self.points = job_points + bonus_points
         self.save()
 
     def can_register(self):

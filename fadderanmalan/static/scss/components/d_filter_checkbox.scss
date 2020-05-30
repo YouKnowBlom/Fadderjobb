@@ -1,0 +1,18 @@
+@import "../../../../fadderjobb/static/scss/constants.scss";
+
+body.darkmode {
+  .filter-checkbox-wrapper {
+    background-color: $darkmode-input-background;
+    color: white;
+  }
+
+  .filter-checkbox-caret {
+    background-color: #eee;
+  }
+
+  .filter-checkbox input:checked {
+    + .filter-checkbox-label-no, + .filter-checkbox-label-yes {
+      color: black !important;
+    }
+  }
+}

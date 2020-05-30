@@ -1,0 +1,26 @@
+body.mobile {
+  input {
+    font-size: 150%;
+  }
+
+  .filter, .filter-button {
+    min-width: 94vw;
+    height: 100px;
+  }
+
+  .filter-button {
+    font-size: 130%;
+  }
+
+  .filter-search {
+    font-size: 120%;
+  }
+
+  .dropdown-item {
+    font-size: 300%;
+  }
+
+  .dropdown-toggle {
+    padding: 0 15px;
+  }
+}

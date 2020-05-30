@@ -9,6 +9,7 @@ from django.db import models
 
 from loginas.utils import login_as
 
+from .models import BonusPoints
 from fadderanmalan.models import EquipmentOwnership, EnterQueue
 from fadderjobb.filters import DropdownFilterRelated
 
@@ -55,6 +56,13 @@ class EquipmentOwnershipInline(admin.TabularInline):
     show_change_link = True
 
 
+class BonusPointsAdmin(admin.ModelAdmin):
+    model = BonusPoints
+
+    fields = ("reason", "points", "created")
+    readonly_fields = ("created",)
+
+
 class UserAdmin(admin.ModelAdmin):
     model = User
 
@@ -68,6 +76,7 @@ class UserAdmin(admin.ModelAdmin):
         "phone_number",
         "motto",
         "read_guide",
+        "bonus_points",
         "is_superuser",
         "is_staff",
         "groups",
@@ -75,6 +84,7 @@ class UserAdmin(admin.ModelAdmin):
         "date_joined",
         "last_login",
     )
+    filter_horizontal = ("bonus_points",)
 
     readonly_fields = ("date_joined", "last_login", "url")
 
@@ -121,3 +131,4 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(BonusPoints, BonusPointsAdmin)
