@@ -25,30 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
-SECRET_KEY_PATH = os.path.join(BASE_DIR, "fadderjobb", "secret_key.txt")
-
 CREDENTIALS_PATH = os.path.join(BASE_DIR, "credentials.json")
-
-
-# def load_secret_key():
-#     if os.path.isfile(SECRET_KEY_PATH):
-#         with open(SECRET_KEY_PATH) as file:
-#             return file.read()
-#     else:
-#         from django.utils.crypto import get_random_string
-
-#         chars = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)"
-#         secret = get_random_string(50, chars)
-
-#         with open(SECRET_KEY_PATH, "w") as file:
-#             file.write(secret)
-
-#         return secret
-
-
-# print("\n\n" + load_secret_key() + "\n\n")
-
-# SECRET_KEY = load_secret_key()
 
 if os.path.isfile(CREDENTIALS_PATH):
     with open(CREDENTIALS_PATH) as file:
