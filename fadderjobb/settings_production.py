@@ -13,7 +13,7 @@ DATABASES = {
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", ""),
         "USER": credentials["database"]["user"],
-        "PASSWORD": credentials["database"]["user"],
+        "PASSWORD": credentials["database"]["password"],
     }
 }
 
