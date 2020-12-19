@@ -47,20 +47,6 @@ _En fadder:_
 - Kan hämta en .ics-länk till en kalender för alla sina jobb.
 - Byta jobb med andra faddrar
 
-## Planerat
-
-### Admin
-
-_Admin ska:_
-
-- _Inget planerat_
-
-### Fadder
-
-_En fadder ska:_
-
-- _Inget planerat_
-
 ## Deployment
 
 För att köra projektet krävs filen `credentials.json` i root-mappen 
