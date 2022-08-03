@@ -26,7 +26,10 @@
                 <a href="{% url 'accounts:profile' user.username %}">
                     <div class="topchart-user">
                         <h3 class="topchart-user-username">
-                            <span class="badge">#{{ user.placing }}</span> <span class="badge">{{ user.points }}<span class="lowercase">p</span></span> {{ user }}
+                            {% if user.placing is not None %}
+                                <span class="badge">#{{ user.placing }}</span>
+                            {% endif %}
+                            <span class="badge">{{ user.points }}<span class="lowercase">p</span></span> {{ user }}
                         </h3>
                         {% if user.motto %}
                             <div class="topchart-user-motto">

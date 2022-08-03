@@ -75,7 +75,7 @@ LOGGING = {
             "formatter": "post_office",
         },
     },
-    "loggers": {"post_office": {"handlers": ["post_office"], "level": "ERROR",},},
+    "loggers": {"post_office": {"handlers": ["post_office"], "level": "ERROR", }, },
 }
 
 # Application definition
@@ -212,7 +212,7 @@ CONSTANCE_CONFIG = {
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",}
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", }
 ]
 
 
