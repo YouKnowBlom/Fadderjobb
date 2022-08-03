@@ -39,7 +39,8 @@ DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    "127.0.0.1" "fadderjobb.staben.info",
+    "127.0.0.1",
+    "fadderjobb.staben.info",
     "fadderjobb.herokuapp.com",
 ]
 
