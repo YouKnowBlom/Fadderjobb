@@ -248,7 +248,7 @@ PHONENUMBER_DEFAULT_REGION = "SE"
 
 # Used by CAS to set admin-status
 
-SYSTEM_ADMINS = ["emini757"]
+SYSTEM_ADMINS = ["joshu135"]
 
 DEFAULT_DOMAIN = "https://fadderjobb.staben.info"
 
