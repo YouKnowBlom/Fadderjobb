@@ -6,7 +6,7 @@ chardet==3.0.4
 cryptography==2.6.1
 Django==2.2.4
 django-appconf==1.0.3
-django-cas-client==1.5.0
+django-cas-client==1.5.3
 django-compressor==2.2
 django-constance==2.4.0
 django-extensions==2.1.6
