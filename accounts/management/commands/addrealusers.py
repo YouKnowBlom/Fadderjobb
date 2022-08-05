@@ -21,19 +21,10 @@ class Command(BaseCommand):
 
         with open(file_name, "r", encoding="utf-8") as f:
             reader = csv.reader(f)
-            for row in reader:
-                user = User.objects.create(
-                    name=row[0],
-                    username=row[1].lower(),
-                    phone_number=row[2],
-                    email=row[3],
-                )
-                user.save()
-
-            # users = [User(
-            #     name=row[0],
-            #     username=row[1].lower(),
-            #     phone_number=row[2],
-            #     email=row[3],
-            # ) for row in reader]
-            # User.objects.bulk_create(users)
+            users = [User(
+                name=row[0],
+                username=row[1].lower(),
+                phone_number=row[2],
+                email=row[3],
+            ) for row in reader]
+            User.objects.bulk_create(users, ignore_conflicts=True)
