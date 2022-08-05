@@ -41,7 +41,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "fadderjobb.staben.info",
-    "fadderjobb.herokuapp.com",
+    "fadderjobb.d-sektionen.se"
 ]
 
 AUTH_USER_MODEL = "accounts.User"
@@ -250,7 +250,7 @@ PHONENUMBER_DEFAULT_REGION = "SE"
 
 SYSTEM_ADMINS = ["joshu135"]
 
-DEFAULT_DOMAIN = "https://fadderjobb.staben.info"
+DEFAULT_DOMAIN = "https://fadderjobb.d-sektionen.se"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
