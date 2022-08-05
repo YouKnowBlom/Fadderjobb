@@ -91,7 +91,8 @@ class JobAdmin(admin.ModelAdmin):
         EQInline,
     )
 
-    list_display = ("name", "start_date", "locked", "hidden", "slots_taken")
+    list_display = ("name", "start_date", "locked",
+                    "hidden", "slots_taken", "points")
 
     exclude = ("users", "slug")
 
@@ -147,7 +148,8 @@ class JobAdmin(admin.ModelAdmin):
             if obj.full():
                 messages.add_message(request, messages.ERROR, "Job is full.")
             elif not obj.has_enter_queue():
-                messages.add_message(request, messages.ERROR, "Job has no enterqueue.")
+                messages.add_message(
+                    request, messages.ERROR, "Job has no enterqueue.")
             elif "fadderanmalan.change_job" not in request.user.get_all_permissions():
                 messages.add_message(
                     request, messages.ERROR, "You have insufficient permissions."
