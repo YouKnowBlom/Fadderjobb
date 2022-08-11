@@ -16,7 +16,7 @@ from fadderanmalan.models import (
 )
 from accounts.models import User
 
-from .actions import job_set_locked, job_set_hidden, job_notify_registered
+from .actions import job_set_locked, job_set_shown, job_set_hidden, job_set_unlocked, job_notify_registered
 from .forms import JobAdminForm
 from .utils import notify_registered
 
@@ -96,7 +96,8 @@ class JobAdmin(admin.ModelAdmin):
 
     exclude = ("users", "slug")
 
-    actions = (job_set_locked, job_set_hidden, job_notify_registered)
+    actions = (job_set_locked, job_set_unlocked, job_set_shown,
+               job_set_hidden, job_notify_registered)
 
     list_filter = (
         "locked",
@@ -121,7 +122,7 @@ class JobAdmin(admin.ModelAdmin):
         return actions
 
     def get_ordering(self, request):
-        return ["name"]
+        return ["start_date", "start_time"]
 
     def url(self, obj):
         url = obj.url()
