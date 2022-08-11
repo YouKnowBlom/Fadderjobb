@@ -18,7 +18,8 @@ def handle_register(request, job):
         except JobUser.DoesNotExist:
             JobUser.create(job, request.user)
 
-        messages.add_message(request, messages.INFO, "Du är nu registrerad på passet.")
+        messages.add_message(request, messages.INFO,
+                             "Du är nu registrerad på passet.")
 
     # Simply deregister the user from the job
     elif "_deregister" in request.POST:
@@ -59,7 +60,8 @@ def handle_register(request, job):
             eq = EnterQueue.objects.get(job=job, user=request.user)
             eq.delete()
 
-            messages.add_message(request, messages.INFO, "Din köplats är nu borttagen.")
+            messages.add_message(request, messages.INFO,
+                                 "Din köplats är nu borttagen.")
         except EnterQueue.DoesNotExist:
             raise UserError("Du var inte köad för att gå med i jobbet.")
 
@@ -73,7 +75,8 @@ def handle_register(request, job):
             notify_group(
                 "JobSwapNotifications",
                 template="fadderanmalan/email/job_dequeued_notify_admin",
-                template_context=dict(left=request.user, joined=eq.user, job=job),
+                template_context=dict(
+                    left=request.user, joined=eq.user, job=job),
             )
 
             messages.add_message(
@@ -83,7 +86,8 @@ def handle_register(request, job):
                 % eq.user.username,
             )
         except EnterQueue.DoesNotExist:
-            raise UserError("Ingen annan köade för att registrera sig på jobbet.")
+            raise UserError(
+                "Ingen annan köade för att registrera sig på jobbet.")
 
 
 def generate_registration_text(request, job):
@@ -101,7 +105,7 @@ def generate_registration_text(request, job):
 
     if job.is_locked():
         return (
-            "Jobbet är låst. Du kan inte interagera med passet längre, varesig du är registrerad eller inte. "
+            "Jobbet är låst och kan inte interageras med."
             "Om du är registrerad och vill avregistrera dig får du kontakta fadderansvarig.",
             "",
             "",
