@@ -7,103 +7,102 @@
 {% block title %}{{ job.name }} - {% endblock title %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% sass_src 'scss/job_details.scss' %}">
-    <link rel="stylesheet" href="{% sass_src 'scss/form.scss' %}">
-    <link rel="stylesheet" href="{% sass_src 'scss/components/userlink.scss' %}">
+<link rel="stylesheet" href="{% sass_src 'scss/job_details.scss' %}">
+<link rel="stylesheet" href="{% sass_src 'scss/form.scss' %}">
+<link rel="stylesheet" href="{% sass_src 'scss/components/userlink.scss' %}">
 {% endblock head %}
 
 {% block content %}
-    <div class="jobdetail">
-        {% if request.user.is_staff %}
-            <a href="{% url 'admin:fadderanmalan_job_change' job.id %}" target="_blank">Redigera jobb</a>
-        {% endif %}
-        <div class="header">
-            <h1>
-                {% if job.has_enter_queue %}
-                    <i class="fas fa-caret-square-right"
-                       data-toggle="tooltip" data-placement="bottom" title="Faddrar köar för jobbet">
-                    </i>{{ " " }}
-                {% endif %}
-                {% if job.is_locked %}
-                    <i class="fas fa-lock"
-                       data-toggle="tooltip" data-placement="bottom" title="Jobbet är låst">
-                    </i>{{ " " }}
-                {% endif %}
-                <span class="badge">{{ job.points }}<span class="lowercase">p</span></span>
-                {{ job.name }}
-            </h1>
-            <small>
-                {{ job.start_date }}
-                {% if job.start_date != job.end_date %} - {{ job.end_date }}{% endif %}
-            </small>
-        </div>
-        {% if job.only_visible_to.all %}
-            <h3>Exklusivt jobb</h3>
-            <p>
-                Detta jobb är endast synligt för användare som tillhör någon av grupperna:
-                {{ job.only_visible_to.all|join:", " }}
-            </p>
-        {% endif %}
-        <p><i>
-            Glöm inte att du förväntas registrera dig på 110 poäng värt av jobb.
-        </i></p>
-        <h3>Beskrivning</h3>
-        <p>
-            {% if job.description %}
-                {{ job.description }}
-            {% else %}
-                <i>Ingen beskrivning för detta jobb.</i>
+<div class="jobdetail">
+    {% if request.user.is_staff %}
+    <a href="{% url 'admin:fadderanmalan_job_change' job.id %}" target="_blank">Redigera jobb</a>
+    {% endif %}
+    <div class="header">
+        <h1>
+            {% if job.has_enter_queue %}
+            <i class="fas fa-caret-square-right" data-toggle="tooltip" data-placement="bottom"
+                title="Faddrar köar för jobbet">
+            </i>{{ " " }}
             {% endif %}
-        </p>
-        <h3>Registrerade faddrar</h3>
-        {% if job.users.count == 0 %}
-            <p><i>Inga faddrar registrerade ännu.</i></p>
-        {% else %}
-            {% for user in job.users.all %}
-                {% userlink user %}
-            {% endfor %}
-        {% endif %}
-        <h3>Övrig information</h3>
-        <table class="table jobdetails-table">
-            <tr>
-                <td>Tid</td>
-                <td>{{ job.start_time|time:"G:i" }} - {{ job.end_time|time:"G:i" }}</td>
-            </tr>
-            <tr>
-                <td>Personer</td>
-                <td>{{ job.slots }}</td>
-            </tr>
-            <tr>
-                <td>Typer</td>
-                <td>{% if job.types.all %}{{ job.types.all|join:", " }}{% else %}<i>Inga typer ännu</i>{% endif %}</td>
-            </tr>
-            {% if registered_to_job %}
-                <tr>
-                    <td>Extra information</td>
-                    <td>
-                        {% if job.extra_info %}
-                            <a href="{{ job.extra_info }}" target="_blank">Länk</a>
-                        {% else %}
-                            <i>Ingen extra info ännu</i>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endif %}
-        </table>
-
-        {% if user.can_register %}
-            <h3>Anmälan</h3>
             {% if job.is_locked %}
-                <p><i>{{ hint_text }}</i></p>
-            {% else %}
-                <form action="{% url 'fadderanmalan:job_details' job.slug %}" method="post">
-                    {% csrf_token %}
-                    <p><i>
-                        {{ hint_text }}
-                    </i></p>
-                    <input type="submit" value="{{ button_text }}" name="{{ button_name }}" class="btn btn-primary">
-                </form>
+            <i class="fas fa-lock" data-toggle="tooltip" data-placement="bottom" title="Jobbet är låst">
+            </i>{{ " " }}
             {% endif %}
-        {% endif %}
+            <span class="badge">{{ job.points }}<span class="lowercase">p</span></span>
+            {{ job.name }}
+        </h1>
+        <small>
+            {{ job.start_date }}
+            {% if job.start_date != job.end_date %} - {{ job.end_date }}{% endif %}
+        </small>
     </div>
+    {% if job.only_visible_to.all %}
+    <h3>Exklusivt jobb</h3>
+    <p>
+        Detta jobb är endast synligt för användare som tillhör någon av grupperna:
+        {{ job.only_visible_to.all|join:", " }}
+    </p>
+    {% endif %}
+    <p><i>
+            Glöm inte att du förväntas registrera dig på 105 poäng värt av jobb.
+        </i></p>
+    <h3>Beskrivning</h3>
+    <p>
+        {% if job.description %}
+        {{ job.description }}
+        {% else %}
+        <i>Ingen beskrivning för detta jobb.</i>
+        {% endif %}
+    </p>
+    <h3>Registrerade faddrar</h3>
+    {% if job.users.count == 0 %}
+    <p><i>Inga faddrar registrerade ännu.</i></p>
+    {% else %}
+    {% for user in job.users.all %}
+    {% userlink user %}
+    {% endfor %}
+    {% endif %}
+    <h3>Övrig information</h3>
+    <table class="table jobdetails-table">
+        <tr>
+            <td>Tid</td>
+            <td>{{ job.start_time|time:"G:i" }} - {{ job.end_time|time:"G:i" }}</td>
+        </tr>
+        <tr>
+            <td>Personer</td>
+            <td>{{ job.slots }}</td>
+        </tr>
+        <tr>
+            <td>Typer</td>
+            <td>{% if job.types.all %}{{ job.types.all|join:", " }}{% else %}<i>Inga typer ännu</i>{% endif %}</td>
+        </tr>
+        {% if registered_to_job %}
+        <tr>
+            <td>Extra information</td>
+            <td>
+                {% if job.extra_info %}
+                <a href="{{ job.extra_info }}" target="_blank">Länk</a>
+                {% else %}
+                <i>Ingen extra info ännu</i>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+    </table>
+
+    {% if user.can_register %}
+    <h3>Anmälan</h3>
+    {% if job.is_locked %}
+    <p><i>{{ hint_text }}</i></p>
+    {% else %}
+    <form action="{% url 'fadderanmalan:job_details' job.slug %}" method="post">
+        {% csrf_token %}
+        <p><i>
+                {{ hint_text }}
+            </i></p>
+        <input type="submit" value="{{ button_text }}" name="{{ button_name }}" class="btn btn-primary">
+    </form>
+    {% endif %}
+    {% endif %}
+</div>
 {% endblock content %}
