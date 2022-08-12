@@ -10,17 +10,25 @@
             {{ job.name }}
         </h3>
         <div class="job-status">
+            {{ job.points }}p
+        </div>
+    </div>
+    <div class="job-title-container">
+        <div class="job-time">
+            {{ job.start_time|time:"G:i" }} - {{ job.end_time|time:"G:i" }}
+        </div>
+        <div class="job-status">
             {% if job.has_enter_queue %}
                 <i class="fas fa-caret-square-right"
-                   data-toggle="tooltip" data-placement="left" title="Faddrar köar för jobbet">
+                    data-toggle="tooltip" data-placement="left" title="Faddrar köar för jobbet">
                 </i>{{ " " }}
             {% endif %}
             {% if job.is_locked %}
                 <i class="fas fa-lock"
-                   data-toggle="tooltip" data-placement="left" title="Jobbet är låst">
+                    data-toggle="tooltip" data-placement="left" title="Jobbet är låst">
                 </i>{{ " " }}
             {% endif %}
-            {{ job.users.count }}/{{ job.slots }} - {{ job.points }}p
+            {{ job.users.count }} / {{ job.slots }}
         </div>
     </div>
     <div class="job-body">
