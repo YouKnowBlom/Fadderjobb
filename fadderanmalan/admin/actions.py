@@ -11,11 +11,25 @@ def job_set_locked(modeladmin, request, queryset):
 job_set_locked.short_description = "Lock selected jobs"
 
 
+def job_set_unlocked(modeladmin, request, queryset):
+    queryset.update(locked=False)
+
+
+job_set_unlocked.short_description = "Unlock selected jobs"
+
+
 def job_set_hidden(modeladmin, request, queryset):
     queryset.update(hidden=True)
 
 
 job_set_hidden.short_description = "Hide selected jobs"
+
+
+def job_set_shown(modeladmin, request, queryset):
+    queryset.update(hidden=False)
+
+
+job_set_shown.short_description = "Show selected jobs"
 
 
 def job_notify_registered(modeladmin, request, queryset):
