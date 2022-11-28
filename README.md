@@ -1,6 +1,10 @@
 # Fadderjobbsystemet
 
-https://fadderjobb.staben.info/
+Ursprungligen skriven av Daniel Roos (STABEN Webb 18/19)
+
+Vidareutvecklad av
+- Emil Nilsson (STABEN Webb & Info 20/21)
+- Joseph Hughes (STABEN Webb & Info 2022)
 
 ## Bakgrund
 
@@ -47,18 +51,18 @@ _En fadder:_
 - Kan hämta en .ics-länk till en kalender för alla sina jobb.
 - Byta jobb med andra faddrar
 
-## Deployment
+## Miljö
 
 För att köra projektet krävs filen `credentials.json` i root-mappen 
 med följande struktur (sentry.io är valfritt):
 ```json
 {
   "email": {
-    "user": "",
+    "user": "noreply@staben.info",
     "password": ""
   },
   "database": {
-    "user": "",
+    "user": "stabenwebb",
     "password": ""
   },
   "sentry.io": {
@@ -101,3 +105,97 @@ Ytterligare konfiguration görs via följande environment-variabler:
 * `EMAIL_PORT`
 
     Default: `587`
+
+
+### Development
+Jag hade svårt att få igång Django i Windows. Därför rekommenderas Linux eller WSL.
+
+Skapa ett virtual enviroment.
+```shell
+$ pip install virtualenv
+$ virtualenv .venv
+```
+
+Aktivera miljon.
+```shell
+$ source .venv/bin/activate
+```
+
+Installera alla moduler.
+```shell
+$ pip install -r requirements.txt
+```
+
+## Körinstruktioner (lokalt)
+Kommandot för python kan variera mellan `py`, `python3` eller `python`. Se till att du kör Python 3 och inte 2.
+
+Kör alla databasmigrationer.
+```shell
+$ python3 manage.py migrate
+```
+
+Kör servern i dev mode.
+```shell
+$ python3 manage.py runserver
+```
+
+`manage.py` har en massa andra verktyg. För att lista tillgängliga kommandon, skriv:
+
+```shell
+$ python3 manage.py help
+```
+
+### Deployment (production)
+Efter att ha committat något lokalt kör du följande för att få igång det på servern.
+
+Anslut till servern och navigera till backend-mappen.
+```shell
+$ ssh username@d-sektionen.lysator.liu.se
+$ cd /srv/staben/Fadderjobb
+```
+
+Hämta dom senaste ändringarna.
+```shell
+$ git pull
+```
+
+Aktivera miljön.
+```shell
+$ source .venv/bin/activate
+```
+
+Om dina ändringar innehåller databasmigrationer, applicera dom.
+```shell
+$ python3 manage.py migrate
+```
+
+Starta om python-servern.
+```shell
+$ sudo systemctl restart uwsgi.service
+```
+
+## Databasmigrationer
+För att uppdatera databasen efter att exempelvis ha redigerat `models.py` måste Django köra en databasmigrering.
+
+Skapa en automatisk migration från kodändringarna.
+```shell
+$ python3 manage.py makemigrations
+```
+
+OBS: du bör inte köra `makemigrations` på servern eftersom dom skapade migrationerna bör vara i samma commit som kodändringarna.
+
+Applicera nya migrationer. 
+```shell
+$ python3 manage.py migrate
+```
+
+Mer info om migrationer: https://docs.djangoproject.com/en/3.0/topics/migrations/
+
+## Django-adminen
+Admin-panelen nås via sidan /admin/.
+
+Admin-konton skapas genom kommandot:
+
+```shell
+python3 manage.py createsuperuser
+```
