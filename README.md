@@ -189,7 +189,7 @@ Applicera nya migrationer.
 $ python3 manage.py migrate
 ```
 
-Mer info om migrationer: https://docs.djangoproject.com/en/3.0/topics/migrations/
+Mer info om migrationer: https://docs.djangoproject.com/en/2.2/topics/migrations/
 
 ## Django-adminen
 Admin-panelen nås via sidan /admin/.
