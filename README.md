@@ -199,3 +199,13 @@ Admin-konton skapas genom kommandot:
 ```shell
 python3 manage.py createsuperuser
 ```
+
+## Importera nya användare
+Efter FU2:an kommer Fadderansvarig sannolikt ha ett stort excel-ark med alla faddrar. För att importera dessa finns ett enkelt skript i `accounts\management\commands\addrealusers.py`.
+
+Detta körs på servern via
+```shell
+python3 manage.py addrealusers faddrar.csv --settings fadderjobb.settings_production
+```
+
+där faddrar.csv är en CSV fil utan rubriker med kolonnerna name, username, phone_number, email. Username bör vara faddrarnas LiU-id:n.
