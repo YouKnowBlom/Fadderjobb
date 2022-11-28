@@ -148,7 +148,7 @@ $ python3 manage.py help
 ### Deployment (production)
 Efter att ha committat något lokalt kör du följande för att få igång det på servern.
 
-Anslut till servern och navigera till backend-mappen.
+Anslut till servern och navigera till Fadderjobb-mappen.
 ```shell
 $ ssh username@d-sektionen.lysator.liu.se
 $ cd /srv/staben/Fadderjobb
