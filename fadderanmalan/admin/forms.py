@@ -13,6 +13,22 @@ class JobAdminForm(ModelForm):
                 )
             )
 
+        if cleaned_data.get("oneway_locked_until") > cleaned_data.get("oneway_locked_after"):
+            raise ValidationError(
+                dict(
+                    oneway_locked_until="'One-way locked until' has to be before 'One-way locked after'.",
+                    oneway_locked_after="'One-way locked until' has to be before 'One-way locked after'.",
+                )
+            )
+
+        if cleaned_data.get("oneway_locked") and cleaned_data.get("locked"):
+            raise ValidationError(
+                dict(
+                    oneway_locked="One-way locked and locked cannot both be enabled.",
+                    locked="One-way locked and locked cannot both be enabled.",
+                )
+            )
+
         if cleaned_data.get("locked_until") > cleaned_data.get("locked_after"):
             raise ValidationError(
                 dict(

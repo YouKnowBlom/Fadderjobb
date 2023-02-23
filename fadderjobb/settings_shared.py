@@ -181,6 +181,14 @@ CONSTANCE_CONFIG = {
         date(datetime.now().year, 1, 1),
         "Jobben kommer att visas PÅ detta datum. " "Kan ändras per jobb.",
     ),
+    "DEFAULT_JOB_ONEWAY_LOCKED_AFTER": (
+        date(datetime.now().year + 1, 1, 1),
+        "EFTER detta datum kommer jobben att envägslåsas. " "Kan ändras per jobb.",
+    ),
+    "DEFAULT_JOB_ONEWAY_LOCKED_UNTIL": (
+        date(datetime.now().year, 1, 1),
+        "Jobben kommer envägslåset att låsas upp PÅ detta datum. " "Kan ändras per jobb.",
+    ),
     "DEFAULT_JOB_LOCKED_AFTER": (
         date(datetime.now().year + 1, 1, 1),
         "EFTER detta datum kommer jobben att låsas. " "Kan ändras per jobb.",

@@ -117,6 +117,13 @@ class EnterQueue(models.Model):
             template_context=dict(job=self.job, user=self.user),
         )
 
+def default_oneway_locked_after():
+    return config.DEFAULT_JOB_ONEWAY_LOCKED_AFTER
+
+
+def default_oneway_locked_until():
+    return config.DEFAULT_JOB_ONEWAY_LOCKED_UNTIL
+
 
 def default_locked_after():
     return config.DEFAULT_JOB_LOCKED_AFTER
@@ -169,8 +176,23 @@ class Job(models.Model):
         help_text="Jobbet kommer att visas FRÅN OCH MED detta datum.",
     )
 
+    oneway_locked = models.BooleanField(
+        help_text="Om jobbet ska vara envägslåst. " "Överskrider datumen nedan.",
+        verbose_name="One-way locked",
+    )
+    oneway_locked_after = models.DateField(
+        default=default_oneway_locked_after,
+        verbose_name="One-way locked after",
+        help_text="Dagen EFTER detta datum kommer jobbet att låsas.",
+    )
+    oneway_locked_until = models.DateField(
+        default=default_oneway_locked_until,
+        verbose_name="One-way locked until",
+        help_text="Jobbet kommer att låsas upp FRÅN OCH MED detta datum.",
+    )
+
     locked = models.BooleanField(
-        help_text="Om jobbet ska vara låst. " "Överskrider datumen nedan."
+        help_text="Om jobbet ska vara låst. " "Överskrider datumen nedan.",
     )
     locked_after = models.DateField(
         default=default_locked_after,
