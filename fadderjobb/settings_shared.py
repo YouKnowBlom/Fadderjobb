@@ -82,6 +82,7 @@ LOGGING = {
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
+    "django_auth_adfs",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -103,6 +104,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_auth_adfs.middleware.LoginRequiredMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -111,7 +113,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "cas.middleware.CASMiddleware",
     "accounts.middleware.warn_no_phone_number",
     "accounts.middleware.warn_not_read_guide",
 ]
@@ -160,17 +161,22 @@ if not DEBUG:
             send_default_pii=True,
         )
 
-# CAS
-# https://github.com/kstateome/django-cas/
+# ADFS
+AUTH_ADFS = {
+    "SERVER": "adfs.yourcompany.com",
+    "CLIENT_ID": "your-configured-client-id",
+    "RELYING_PARTY_ID": "your-adfs-RPT-name",
+    # Make sure to read the documentation about the AUDIENCE setting
+    # when you configured the identifier as a URL!
+    "AUDIENCE": "microsoft:identityserver:your-RelyingPartyTrust-identifier",
+    "CA_BUNDLE": "/path/to/ca-bundle.pem",
+    "CLAIM_MAPPING": {"first_name": "given_name",
+                      "last_name": "family_name",
+                      "email": "email"},
+}
 
-CAS_SERVER_URL = "https://login.liu.se/cas/"
-CAS_LOGOUT_COMPLETELY = True
-CAS_PROVIDE_URL_TO_LOGOUT = True
-CAS_RESPONSE_CALLBACKS = [
-    "accounts.cas_callbacks.add_email",
-    "accounts.cas_callbacks.set_admin",
-]
-CAS_CUSTOM_FORBIDDEN = "accounts:loginfailed"
+LOGIN_URL = "django_auth_adfs: login"
+LOGIN_REDIRECT_URL = "/"
 
 # Live settings
 # https://github.com/jazzband/django-constance/

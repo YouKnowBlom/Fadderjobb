@@ -36,6 +36,7 @@ urlpatterns = [
     path("calendar/", include("job_calendar.urls")),
     path("topchart/", include("topchart.urls")),
     path("trade/", include("trade.urls")),
+    path("oauth2/", include("django_auth_adfs.urls")),
     # Going to /admin when not logged in results in a redirect to cas.views.login, which I can't be bothered to
     # find where it's configured. Adding the following line allows me to configure a non-namespaced "cas.views.login"
     # path which I can redirect to the same login-view as normal.
