@@ -51,6 +51,7 @@ class EQInline(admin.TabularInline):
             db_field, request, **kwargs
         )
 
+
         if db_field.name == "user":
             if request.obj_ is not None:
                 field.queryset = field.queryset.filter(
@@ -94,7 +95,7 @@ class JobAdmin(admin.ModelAdmin):
         EQInline,
     )
 
-    list_display = ("name", "start_date", "locked",
+    list_display = ("name", "start_date", "oneway_locked", "locked",
                     "hidden", "slots_taken", "points")
 
     exclude = ("users", "slug")
