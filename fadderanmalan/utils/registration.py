@@ -23,6 +23,9 @@ def handle_register(request, job):
 
     # Simply deregister the user from the job
     elif "_deregister" in request.POST:
+        if job.is_onewaylocked():
+            raise Exception("Du kan inte avregistrera dig.")
+
         if job.is_locked():
             raise Exception("Du kan inte avregistrera dig.")
 
@@ -89,13 +92,16 @@ def handle_register(request, job):
             raise UserError(
                 "Ingen annan köade för att registrera sig på jobbet.")
 
+def is_registered_on_job(job, user):
+    try:
+        JobUser.get(job, user)
+        return True
+    except JobUser.DoesNotExist:
+        return False
+
 
 def generate_registration_text(request, job):
-    try:
-        JobUser.get(job, request.user)
-        registered_to_job = True
-    except JobUser.DoesNotExist:
-        registered_to_job = False
+    registered_to_job = is_registered_on_job(job=job, user=request.user)
 
     try:
         EnterQueue.objects.get(user=request.user, job=job)
@@ -105,14 +111,29 @@ def generate_registration_text(request, job):
 
     if job.is_locked():
         return (
-            "Jobbet är låst och kan inte interageras med."
+            "Jobbet är låst och kan inte interageras med. "
             "Om du är registrerad och vill avregistrera dig får du kontakta fadderansvarig.",
             "",
             "",
         )
 
     if registered_to_job:
-        return ("", "Avanmäl mig", "_deregister")
+        if job.is_onewaylocked():
+            if job.has_enter_queue():
+                return (
+                    "Jobbet är envägslåst. Eftersom det är faddrar som köar så är det möjligt att avanmäla dig.",
+                    "Avanmäl mig",
+                    "_deregister"
+                )
+            else:
+                return (
+                    "Jobbet är envägslåst och kan inte lämnas. "
+                    "Om du är registrerad och vill avregistrera dig får du kontakta fadderansvarig.",
+                    "",
+                    ""
+                )
+        else:
+            return ("", "Avanmäl mig", "_deregister")
     else:
         if job.full():
             if queued_to_enter:

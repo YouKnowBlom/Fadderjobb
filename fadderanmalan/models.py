@@ -283,6 +283,10 @@ class Job(models.Model):
         today = timezone.now().date()
         return self.hidden or not (self.hidden_until <= today <= self.hidden_after)
 
+    def is_onewaylocked(self):
+        today = timezone.now().date()
+        return self.oneway_locked or not (self.oneway_locked_until <= today <= self.oneway_locked_after)
+
     def is_locked(self):
         today = timezone.now().date()
         return self.locked or not (self.locked_until <= today <= self.locked_after)

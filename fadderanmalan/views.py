@@ -98,8 +98,10 @@ def job_details(request, slug):
         hint_text, button_text, button_name = reg_utils.generate_registration_text(
             request, job
         )
+        is_registered_on_job = reg_utils.is_registered_on_job(job=job,user=request.user)
+
         context.update(
-            hint_text=hint_text, button_text=button_text, button_name=button_name
+            hint_text=hint_text, button_text=button_text, button_name=button_name, registered_to_job=is_registered_on_job
         )
 
     return render(request, "fadderanmalan/job_details.html", context)

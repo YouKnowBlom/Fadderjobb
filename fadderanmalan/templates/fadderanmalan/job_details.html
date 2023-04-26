@@ -24,8 +24,12 @@
                 title="Faddrar köar för jobbet">
             </i>{{ " " }}
             {% endif %}
+            {% if job.is_onewaylocked %}
+            <i class="fa-solid fa-arrow-down-up-lock" data-toggle="tooltip" data-placement="bottom" title="Jobbet är envägslåst">
+            </i>{{ " " }}
+            {% endif %}
             {% if job.is_locked %}
-            <i class="fas fa-lock" data-toggle="tooltip" data-placement="bottom" title="Jobbet är låst">
+            <i class="fa-solid fa-lock" data-toggle="tooltip" data-placement="bottom" title="Jobbet är låst">
             </i>{{ " " }}
             {% endif %}
             <span class="badge">{{ job.points }}<span class="lowercase">p</span></span>
@@ -94,6 +98,26 @@
     <h3>Anmälan</h3>
     {% if job.is_locked %}
     <p><i>{{ hint_text }}</i></p>
+    {% elif job.is_onewaylocked %}
+        {% if registered_to_job and job.has_enter_queue %}
+        <form action="{% url 'fadderanmalan:job_details' job.slug %}" method="post">
+            {% csrf_token %}
+            <p><i>
+                    {{ hint_text }}
+                </i></p>
+            <input type="submit" value="{{ button_text }}" name="{{ button_name }}" class="btn btn-primary">
+        </form>
+        {% elif registered_to_job %}
+        <p><i>{{ hint_text }}<i></p>
+        {% else %}
+        <form action="{% url 'fadderanmalan:job_details' job.slug %}" method="post">
+            {% csrf_token %}
+            <p><i>
+                    {{ hint_text }}
+                </i></p>
+            <input type="submit" value="{{ button_text }}" name="{{ button_name }}" class="btn btn-primary">
+        </form>
+        {% endif %}
     {% else %}
     <form action="{% url 'fadderanmalan:job_details' job.slug %}" method="post">
         {% csrf_token %}
