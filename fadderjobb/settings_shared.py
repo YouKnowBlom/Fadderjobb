@@ -163,13 +163,10 @@ if not DEBUG:
 
 # ADFS
 AUTH_ADFS = {
-    "SERVER": "adfs.yourcompany.com",
-    "CLIENT_ID": "your-configured-client-id",
-    "RELYING_PARTY_ID": "your-adfs-RPT-name",
-    # Make sure to read the documentation about the AUDIENCE setting
-    # when you configured the identifier as a URL!
-    "AUDIENCE": "microsoft:identityserver:your-RelyingPartyTrust-identifier",
-    "CA_BUNDLE": "/path/to/ca-bundle.pem",
+    "SERVER": "fs.liu.se",
+    "CLIENT_ID": credentials["adfs"].get("client_id", ""),
+    "RELYING_PARTY_ID": credentials["adfs"].get("client_id", ""),
+    "AUDIENCE": "microsoft:identityserver:https://fadderjobb.staben.info/oauth2/callback",
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
                       "email": "email"},
