@@ -46,8 +46,6 @@ ALLOWED_HOSTS = [
 
 AUTH_USER_MODEL = "accounts.User"
 
-LOGIN_URL = "accounts:login"
-
 # Impersonation
 # https://github.com/skorokithakis/django-loginas
 
@@ -104,13 +102,13 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django_auth_adfs.middleware.LoginRequiredMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_auth_adfs.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "accounts.middleware.warn_no_phone_number",
@@ -119,7 +117,7 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "cas.backends.CASBackend",
+    "django_auth_adfs.backend.AdfsAuthCodeBackend",
 )
 
 ROOT_URLCONF = "fadderjobb.urls"
@@ -166,14 +164,15 @@ AUTH_ADFS = {
     "SERVER": "fs.liu.se",
     "CLIENT_ID": credentials["adfs"].get("client_id", ""),
     "RELYING_PARTY_ID": credentials["adfs"].get("client_id", ""),
-    "AUDIENCE": "microsoft:identityserver:https://fadderjobb.staben.info/oauth2/callback",
+    "AUDIENCE": "microsoft:identityserver:" + credentials["adfs"].get("client_id", ""),
+    "CA_BUNDLE": True,
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",
                       "email": "email"},
 }
 
-LOGIN_URL = "django_auth_adfs: login"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "django_auth_adfs:login"
+LOGIN_REDIRECT_URL = "/oauth2/callback"
 
 # Live settings
 # https://github.com/jazzband/django-constance/
