@@ -28,6 +28,7 @@ idna==2.8
 jsonfield==2.0.2
 libsass==0.18.0
 phonenumbers==8.12.42
+psycopg2==2.8.6
 py-vapid==1.5.0
 pycparser==2.19
 PyJWT==2.7.0
