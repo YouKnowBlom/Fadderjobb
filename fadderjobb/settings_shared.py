@@ -46,8 +46,6 @@ ALLOWED_HOSTS = [
 
 AUTH_USER_MODEL = "accounts.User"
 
-LOGIN_URL = "accounts:login"
-
 # Impersonation
 # https://github.com/skorokithakis/django-loginas
 
@@ -82,6 +80,7 @@ LOGGING = {
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
+    "django_auth_adfs",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -109,16 +108,16 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_auth_adfs.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "cas.middleware.CASMiddleware",
     "accounts.middleware.warn_no_phone_number",
     "accounts.middleware.warn_not_read_guide",
 ]
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "cas.backends.CASBackend",
+    "django_auth_adfs.backend.AdfsAuthCodeBackend",
 )
 
 ROOT_URLCONF = "fadderjobb.urls"
@@ -160,17 +159,20 @@ if not DEBUG:
             send_default_pii=True,
         )
 
-# CAS
-# https://github.com/kstateome/django-cas/
+# ADFS
+AUTH_ADFS = {
+    "SERVER": "fs.liu.se",
+    "CLIENT_ID": credentials["adfs"].get("client_id", ""),
+    "RELYING_PARTY_ID": credentials["adfs"].get("client_id", ""),
+    "AUDIENCE": "microsoft:identityserver:" + credentials["adfs"].get("client_id", ""),
+    "CA_BUNDLE": True,
+    "CLAIM_MAPPING": {"first_name": "given_name",
+                      "last_name": "family_name",
+                      "email": "email"},
+}
 
-CAS_SERVER_URL = "https://login.liu.se/cas/"
-CAS_LOGOUT_COMPLETELY = True
-CAS_PROVIDE_URL_TO_LOGOUT = True
-CAS_RESPONSE_CALLBACKS = [
-    "accounts.cas_callbacks.add_email",
-    "accounts.cas_callbacks.set_admin",
-]
-CAS_CUSTOM_FORBIDDEN = "accounts:loginfailed"
+LOGIN_URL = "django_auth_adfs:login"
+LOGIN_REDIRECT_URL = "/oauth2/callback"
 
 # Live settings
 # https://github.com/jazzband/django-constance/
