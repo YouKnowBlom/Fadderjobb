@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from constance import config
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, "index.html", {"config": config})
 
 
 @login_required

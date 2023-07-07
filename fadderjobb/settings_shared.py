@@ -206,6 +206,10 @@ CONSTANCE_CONFIG = {
         0,
         "Minsta antalet poäng som krävs av en fadder. Fyller i dagsläget ingen funktionalitet.",
     ),
+    "PRIMARY_ADMIN_NAME": (
+        "",
+        "Namnet på primär admin som används som kontaktperson vid frågor om fadderjobb.",
+    ),
 }
 
 # Password validation
