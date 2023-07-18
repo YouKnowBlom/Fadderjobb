@@ -4,8 +4,7 @@ DEBUG = False
 
 SECRET_KEY_PATH = os.path.join(BASE_DIR, "fadderjobb", "secret_key.txt")
 
-CREDENTIALS_PATH = os.path.join(BASE_DIR, "credentials.json")
-
+load_dotenv(find_dotenv())
 
 def load_secret_key():
     if os.path.isfile(SECRET_KEY_PATH):
@@ -33,8 +32,8 @@ DATABASES = {
         "NAME": os.environ.get("DB_NAME", "fadderjobb"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", ""),
-        "USER": credentials["database"]["user"],
-        "PASSWORD": credentials["database"]["password"],
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
     }
 }
 
@@ -48,8 +47,8 @@ EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
 
 EMAIL_PORT = os.environ.get("EMAIL_PORT", 587)
 
-EMAIL_HOST_USER = credentials["email"]["user"]
+EMAIL_HOST_USER = os.getenv("EMAIL_USER")
 
-EMAIL_HOST_PASSWORD = credentials["email"]["password"]
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 EMAIL_USE_TLS = True

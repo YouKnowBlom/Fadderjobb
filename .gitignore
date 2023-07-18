@@ -9,3 +9,4 @@ venv
 .venv
 .vscode
 email_logs
+.env

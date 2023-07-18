@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import json
+from dotenv import load_dotenv, find_dotenv
 from datetime import date, time, datetime
-
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -25,13 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
-CREDENTIALS_PATH = os.path.join(BASE_DIR, "credentials.json")
-
-if os.path.isfile(CREDENTIALS_PATH):
-    with open(CREDENTIALS_PATH) as file:
-        credentials = json.load(file)
-else:
-    raise FileNotFoundError("No 'credentials.json' found")
+load_dotenv(find_dotenv())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", None) == "True"
@@ -152,9 +145,9 @@ WSGI_APPLICATION = "fadderjobb.wsgi.application"
 # https://sentry.io/
 
 if not DEBUG:
-    if "sentry.io" in credentials:
+    if os.getenv("SENTRYIO_DSN", "") != "":
         sentry_sdk.init(
-            dsn=credentials["sentry.io"].get("dsn", ""),
+            dsn=os.getenv("SENTRYIO_DSN", ""),
             integrations=[DjangoIntegration()],
             send_default_pii=True,
         )
@@ -162,9 +155,9 @@ if not DEBUG:
 # ADFS
 AUTH_ADFS = {
     "SERVER": "fs.liu.se",
-    "CLIENT_ID": credentials["adfs"].get("client_id", ""),
-    "RELYING_PARTY_ID": credentials["adfs"].get("client_id", ""),
-    "AUDIENCE": "microsoft:identityserver:" + credentials["adfs"].get("client_id", ""),
+    "CLIENT_ID": os.getenv("ADFS_CLIENT_ID"),
+    "RELYING_PARTY_ID": os.getenv("ADFS_CLIENT_ID"),
+    "AUDIENCE": f'microsoft:identityserver:{os.getenv("ADFS_CLIENT_ID")}',
     "CA_BUNDLE": True,
     "CLAIM_MAPPING": {"first_name": "given_name",
                       "last_name": "family_name",

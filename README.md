@@ -53,22 +53,16 @@ _En fadder:_
 
 ## Miljö
 
-För att köra projektet krävs filen `credentials.json` i root-mappen 
+För att köra projektet krävs filen `.env` i root-mappen 
 med följande struktur (sentry.io är valfritt):
-```json
-{
-  "email": {
-    "user": "noreply@staben.info",
-    "password": ""
-  },
-  "database": {
-    "user": "stabenwebb",
-    "password": ""
-  },
-  "sentry.io": {
-    "dsn": ""
-  }
-}
+
+```
+DB_USER=stabenwebb
+DB_PASSWORD=
+EMAIL_USER=noreply@staben.info
+EMAIL_PASSWORD=
+SENTRYIO_DSN=
+ADFS_CLIENT_ID=
 ```
 
 Ytterligare konfiguration görs via följande environment-variabler:
