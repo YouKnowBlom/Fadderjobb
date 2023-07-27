@@ -23,13 +23,14 @@ def handle_register(request, job):
 
     # Simply deregister the user from the job
     elif "_deregister" in request.POST:
-        if job.is_onewaylocked():
-            raise Exception("Du kan inte avregistrera dig.")
-
         if job.is_locked():
             raise Exception("Du kan inte avregistrera dig.")
 
+        if job.is_onewaylocked() and not job.has_enter_queue:
+            raise Exception("Du kan inte avregistrera dig.")
+
         JobUser.remove(job, request.user)
+
         message = "Du är nu avregistrerad från passet."
 
         try:  # If there is someone queued, give the slot to them
