@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count, F, Q
 from django.http import Http404
 from django.shortcuts import render, redirect
+from constance import config
 
 from .models import Job, Type
 from .utils import registration as reg_utils, misc as misc_utils
@@ -93,6 +94,7 @@ def job_details(request, slug):
             return render(request, "400.html", dict(exception=str(e)))
 
     context = dict(job=job)
+    context["config"] = config
 
     if not request.user.is_anonymous:
         hint_text, button_text, button_name = reg_utils.generate_registration_text(

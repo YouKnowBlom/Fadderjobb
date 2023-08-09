@@ -10,7 +10,7 @@ def index(request):
 @login_required
 def guide(request):
     if request.method == "GET":
-        return render(request, "guide.html")
+        return render(request, "guide.html", {"config": config})
 
     elif request.method == "POST":
         if "accept" in request.POST:
