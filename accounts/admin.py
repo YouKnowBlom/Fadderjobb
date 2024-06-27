@@ -71,6 +71,7 @@ class UserAdmin(admin.ModelAdmin):
     fields = (
         "url",
         "username",
+        "is_activated",
         "name",
         "email",
         "phone_number",
@@ -94,7 +95,7 @@ class UserAdmin(admin.ModelAdmin):
         EQInline,
     )
 
-    list_display = ("username", "name", "points", "equipment")
+    list_display = ("username", "name", "email", "is_activated", "points", "equipment")
 
     search_fields = ("username", "name")
 
