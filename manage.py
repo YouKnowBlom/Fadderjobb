@@ -3,7 +3,9 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fadderjobb.settings_development")
+    if "DJANGO_SETTINGS_MODULE" not in os.environ:
+        raise Exception("DJANGO_SETTINGS_MODULE not set")
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

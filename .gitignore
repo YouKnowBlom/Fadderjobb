@@ -10,3 +10,4 @@ venv
 .vscode
 email_logs
 .env
+*.css
