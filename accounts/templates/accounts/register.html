@@ -30,6 +30,8 @@
     <button type="submit" class="btn btn-primary">Registrera</button>
 </form>
 
+<br />
+
 {% if failed %}
     <p class="alert alert-danger" role="alert">
         {% if error_message %}
@@ -45,6 +47,10 @@
         {{ message }}
     </p>
 {% endif %}
+
+<p>
+    Om du försöker aktivera ditt konto gör du det <a href="{% url 'accounts:activate' %}">här</a>.
+</p>
 
 <p>
     Om du inte har ett LiU-ID, eller om du har glömt ditt lösenord, kontakta webbansvarig

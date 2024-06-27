@@ -70,11 +70,35 @@ def register(request):
     user = User.objects.create_user(username=username, password=password, email=to_student_email(username))
     user.save()
 
-    return render(request, "accounts/register.html", {"failed": False, "message": "Användaren har skapats! Kolla din Liu-mejl för att aktivera ditt konto."})
+    return redirect("accounts:activate")
+
 
 def logout(request):
     django_logout(request)
     return redirect("index")
+
+
+def activate(request):
+    if request.method == "GET":
+        return render(request, "accounts/activate_account.html", {"failed": False})
+
+    activation_code = request.POST.get("activation_code")
+    if not activation_code:
+        return render(request, "accounts/activate_account.html", {"failed": True, "error_message": "Du måste fylla i en aktiveringskod."})
+
+    try:
+
+        user = User.objects.get(activation_key=activation_code)
+        user.is_activated = True
+        user.activation_key = ""
+        user.save()
+
+        django_login(request, user)
+
+        return redirect("index")
+    except User.DoesNotExist:
+        return render(request, "accounts/activate_account.html", {"failed": True})
+
 
 def loginfailed(request):
     return render(request, "accounts/loginfailed.html")

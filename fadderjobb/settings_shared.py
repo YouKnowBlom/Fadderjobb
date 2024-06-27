@@ -30,12 +30,14 @@ load_dotenv(find_dotenv())
 DEBUG = os.environ.get("DEBUG", None) == "True"
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
+PUBLIC_HOST = os.getenv("PUBLIC_HOST")
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "fadderjobb.staben.info",
     "fadderjobb.d-sektionen.se",
-    "local.fadderjobb.staben",
+    "local.fadderjobb",
 ]
 
 AUTH_USER_MODEL = "accounts.User"

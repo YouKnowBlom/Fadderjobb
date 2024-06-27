@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load sass_tags %}
+
+{% block head %}
+<link rel="stylesheet" href="{% sass_src 'scss/login.scss' %}">
+{% endblock head %}
+
+{% block content %}
+<h1>Aktivera konto</h1>
+
+<p>
+    Ett mejl med en aktiveringskod har skickats till din student e-postadress. Ange koden för att aktivera ditt konto.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="activation_code">Aktiveringskod</label>
+        <input required type="text" name="activation_code" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Aktivera</button>
+</form>
+
+<br />
+
+{% if failed %}
+    {% if error_message %}
+        <p class="error">
+            {{ error_message }}
+        </p>
+    {% else %}
+        <p class="error">
+            Något gick fel. Kontrollera att du angav rätt aktiveringskod.
+        </p>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}

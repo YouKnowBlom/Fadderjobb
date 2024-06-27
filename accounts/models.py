@@ -9,10 +9,12 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.contrib.sessions.models import Session
+from django.utils.crypto import get_random_string
 
 from phonenumber_field.modelfields import PhoneNumberField
 
 from util import to_student_email
+from fadderjobb.settings_shared import PUBLIC_HOST
 
 class _UserManager(UserManager):
     def get_by_natural_key(self, username):
@@ -42,6 +44,7 @@ class User(AbstractUser):
     bonus_points = models.ManyToManyField(BonusPoints, blank=True)
 
     is_activated = models.BooleanField(default=False)
+    activation_key = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         if self.name:
@@ -83,15 +86,17 @@ class User(AbstractUser):
         return settings.DEFAULT_DOMAIN + local_url
 
     def send_activation_email(self):
-        if self.is_activated:
-            return
+        #if self.is_activated:
+        #    return
 
         if not self.email:
-            self.emil = to_student_email(self.username)
-            self.save()
+            self.email = to_student_email(self.username)
+
+        self.activation_key = get_random_string(length=100)
+        self.save()
 
         notify_user(
             self,
             template="accounts/email/activate_account",
-            template_context=dict(activation_link="test"),
+            template_context=dict(activation_code=self.activation_key),
         )

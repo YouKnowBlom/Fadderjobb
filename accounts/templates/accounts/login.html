@@ -26,6 +26,8 @@
     <button type="submit" class="btn btn-primary">Logga in</button>
 </form>
 
+<br />
+
 {% if failed %}
     {% if error_message %}
         <p class="error">
@@ -37,6 +39,10 @@
         </p>
     {% endif %}
 {% endif %}
+
+<p>
+    Om du försöker aktivera ditt konto gör du det <a href="{% url 'accounts:activate' %}">här</a>.
+</p>
 
 <p>
     Om du inte har ett LiU-ID, eller om du har glömt ditt lösenord, kontakta webbansvarig

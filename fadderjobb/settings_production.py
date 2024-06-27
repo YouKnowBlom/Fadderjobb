@@ -77,5 +77,10 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": True,
         },
+        "post_office": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "post_office"
+        },
     },
 }

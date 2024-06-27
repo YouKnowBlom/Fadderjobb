@@ -3,4 +3,4 @@ Välkommen til Fadderjobb!
 Du har registrerat dig på Fadderjobb!
 Vänligen aktivera ditt konto genom att klicka på länken nedan:
 
-{{activation_link}}
+{{activation_code}}
