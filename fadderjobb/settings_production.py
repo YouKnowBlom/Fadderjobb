@@ -52,3 +52,30 @@ EMAIL_HOST_USER = os.getenv("EMAIL_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 EMAIL_USE_TLS = True
+
+# NOTE: For now, it's enough to log directly to console
+# as you can view console output through docker compose.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": [
+            "console",
+        ],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": [
+                "console",
+            ],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}

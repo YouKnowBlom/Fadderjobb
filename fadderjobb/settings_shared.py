@@ -34,7 +34,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "fadderjobb.staben.info",
-    "fadderjobb.d-sektionen.se"
+    "fadderjobb.d-sektionen.se",
+    "local.fadderjobb.staben",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
@@ -66,14 +67,26 @@ LOGGING = {
             "formatter": "post_office",
         },
     },
-    "loggers": {"post_office": {"handlers": ["post_office"], "level": "ERROR", }, },
+    "loggers": {
+        "post_office": {
+            "handlers": ["post_office"], "level": "ERROR", 
+        },
+        # NOTE: This should be changed to a log file
+        "django.request": {
+            "handlers": [
+                "console",
+            ],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
 }
 
 # Application definition
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
-    "django_auth_adfs",
+    #"django_auth_adfs",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -82,7 +95,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "sass_processor",
-    "cas",
+    #"cas",
     "post_office",
     "constance",
     "constance.backends.database",
@@ -101,7 +114,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django_auth_adfs.middleware.LoginRequiredMiddleware",
+    #"django_auth_adfs.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "accounts.middleware.warn_no_phone_number",
@@ -110,7 +123,7 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "django_auth_adfs.backend.AdfsAuthCodeBackend",
+    #"django_auth_adfs.backend.AdfsAuthCodeBackend",
 )
 
 ROOT_URLCONF = "fadderjobb.urls"
@@ -153,19 +166,19 @@ if not DEBUG:
         )
 
 # ADFS
-AUTH_ADFS = {
-    "SERVER": "fs.liu.se",
-    "CLIENT_ID": os.getenv("ADFS_CLIENT_ID"),
-    "RELYING_PARTY_ID": os.getenv("ADFS_CLIENT_ID"),
-    "AUDIENCE": f'microsoft:identityserver:{os.getenv("ADFS_CLIENT_ID")}',
-    "CA_BUNDLE": True,
-    "CLAIM_MAPPING": {"first_name": "given_name",
-                      "last_name": "family_name",
-                      "email": "email"},
-}
+#AUTH_ADFS = {
+#    "SERVER": "fs.liu.se",
+#    "CLIENT_ID": os.getenv("ADFS_CLIENT_ID"),
+#    "RELYING_PARTY_ID": os.getenv("ADFS_CLIENT_ID"),
+#    "AUDIENCE": f'microsoft:identityserver:{os.getenv("ADFS_CLIENT_ID")}',
+#    "CA_BUNDLE": True,
+#    "CLAIM_MAPPING": {"first_name": "given_name",
+#                      "last_name": "family_name",
+#                      "email": "email"},
+#}
 
-LOGIN_URL = "django_auth_adfs:login"
-LOGIN_REDIRECT_URL = "/oauth2/callback"
+#LOGIN_URL = "django_auth_adfs:login"
+#LOGIN_REDIRECT_URL = "/oauth2/callback"
 
 # Live settings
 # https://github.com/jazzband/django-constance/
