@@ -14,6 +14,7 @@ class Command(BaseCommand):
 
             user.is_staff = True
             user.is_superuser = True
+            user.is_activated = True
             user.save()
 
             self.stdout.write(

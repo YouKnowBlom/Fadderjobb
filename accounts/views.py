@@ -5,6 +5,7 @@ from django.contrib.auth import (
     logout as django_logout,
     get_user_model,
 )
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import Http404
@@ -17,8 +18,63 @@ from fadderanmalan.utils import misc as misc_utils
 
 from trade.models import Trade
 
+from util import to_student_email
+import re
+
 User = get_user_model()
 
+# Cheap, but dumb, to check for liu IDs
+# Might bite us in the ass
+liu_id = re.compile(r"^[a-z]{5}[0-9]{3}$")
+
+def login(request):
+    if request.method != "POST":
+        return render(request, "accounts/login.html", {"failed": False})
+
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+
+    user = authenticate(username=username, password=password)
+    if user is None:
+        return render(request, "accounts/login.html", {"failed": True})
+
+    if not user.is_activated:
+        return render(request, "accounts/login.html", {"failed": True, "error_message": "Användaren är inte aktiverad!"})
+
+    django_login(request, user)
+    return redirect("index")
+
+def register(request):
+    if request.method != "POST":
+        return render(request, "accounts/register.html", {"failed": False})
+
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+    repeat_password = request.POST.get("repeat_password")
+
+    if (not username or liu_id.match(username) is None):
+        return render(request, "accounts/register.html", {"failed": True, "error_message": "Vänligen kontrolla ditt Liu-ID."})
+
+    if (not password or not repeat_password):
+        return render(request, "accounts/register.html", {"failed": True, "error_message": "Du måste fylla i ett lösenrod."})
+
+    if (len(password) < 10):
+        return render(request, "accounts/register.html", {"failed": True, "error_message": "Lösenordet måste vara minst 10 tecken långt."})
+
+    if password != repeat_password:
+        return render(request, "accounts/register.html", {"failed": True, "error_message": "Lösenorden matchar inte."})
+
+    if User.objects.filter(username=username).exists():
+        return render(request, "accounts/register.html", {"failed": True, "error_message": "En användare finns redan för detta Liu-ID."})
+
+    user = User.objects.create_user(username=username, password=password, email=to_student_email(username))
+    user.save()
+
+    return render(request, "accounts/register.html", {"failed": False, "message": "Användaren har skapats! Kolla din Liu-mejl för att aktivera ditt konto."})
+
+def logout(request):
+    django_logout(request)
+    return redirect("index")
 
 def loginfailed(request):
     return render(request, "accounts/loginfailed.html")

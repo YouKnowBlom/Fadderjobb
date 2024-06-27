@@ -1,6 +1,5 @@
 from .models import User
 
-
 def update_user_placings():
     users = User.objects.order_by("-points").all()
 

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from fadderjobb.utils import notify_user
+
 from django.conf import settings
 from django.shortcuts import reverse
 from django.db import models
@@ -10,6 +12,7 @@ from django.contrib.sessions.models import Session
 
 from phonenumber_field.modelfields import PhoneNumberField
 
+from util import to_student_email
 
 class _UserManager(UserManager):
     def get_by_natural_key(self, username):
@@ -37,6 +40,8 @@ class User(AbstractUser):
     points = models.IntegerField(default=0)
     placing = models.IntegerField(blank=True, null=True)
     bonus_points = models.ManyToManyField(BonusPoints, blank=True)
+
+    is_activated = models.BooleanField(default=False)
 
     def __str__(self):
         if self.name:
@@ -76,3 +81,17 @@ class User(AbstractUser):
         if not local_url:
             return None
         return settings.DEFAULT_DOMAIN + local_url
+
+    def send_activation_email(self):
+        if self.is_activated:
+            return
+
+        if not self.email:
+            self.emil = to_student_email(self.username)
+            self.save()
+
+        notify_user(
+            self,
+            template="accounts/email/activate_account",
+            template_context=dict(activation_link="test"),
+        )

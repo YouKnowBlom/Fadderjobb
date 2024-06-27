@@ -4,9 +4,6 @@ from django.contrib.auth.models import Group
 
 from post_office import mail
 
-from accounts.models import User
-
-
 def send_mail(recipient, subject, message, html_message):
     mail.send(
         recipient,

@@ -93,7 +93,7 @@
                             {% csrf_token %}
                         </form>
                     {% else %}
-                        <form id="logout-form" action="{% url 'django_auth_adfs:logout' %}" method="post">
+                        <form id="logout-form" action="{% url 'accounts:logout' %}" method="post">
                             <a class="nav-link" onclick="document.getElementById('logout-form').submit()" href="#">
                                 Logga ut
                             </a>
@@ -101,9 +101,14 @@
                         </form>
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'django_auth_adfs:login' %}"
+                    <a href="{% url 'accounts:login' %}"
                        class="nav-link{% if request.resolver_match.view_name|startswith:'accounts:login' %} active{% endif %}">
                         Logga in
+                    </a>
+                    <span class="nav-link">/</span>
+                    <a href="{% url 'accounts:register' %}"
+                       class="nav-link{% if request.resolver_match.view_name|startswith:'accounts:register' %} active{% endif %}">
+                        Registrera
                     </a>
                 {% endif %}
             </div>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load sass_tags %}
+
+{% block head %}
+<link rel="stylesheet" href="{% sass_src 'scss/login.scss' %}">
+{% endblock head %}
+
+{% block content %}
+<h1>Logga in</h1>
+
+<p>
+    Logga in med ditt LiU-ID för att få tillgång till fadderjobbsportalen.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">LiU-ID</label>
+        <input required type="text" name="username" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Lösenord</label>
+        <input required type="password" name="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Logga in</button>
+</form>
+
+{% if failed %}
+    {% if error_message %}
+        <p class="error">
+            {{ error_message }}
+        </p>
+    {% else %}
+        <p class="error">
+            Fel användarnamn eller lösenord.
+        </p>
+    {% endif %}
+{% endif %}
+
+<p>
+    Om du inte har ett LiU-ID, eller om du har glömt ditt lösenord, kontakta webbansvarig
+    ({{ config.PRIMARY_ADMIN_NAME }}) via Slack eller <a href="mailto:web@staben.info" target="_blank">mail</a>.
+</p>
+
+{% endblock content %}
