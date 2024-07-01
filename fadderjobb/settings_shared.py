@@ -36,7 +36,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "fadderjobb.staben.info",
-    "tackling-fadderjobb.staben.info.staben.info",
+    "tackling-fadderjobb.staben.info",
     "fadderjobb.d-sektionen.se",
     "local.fadderjobb",
 ]
