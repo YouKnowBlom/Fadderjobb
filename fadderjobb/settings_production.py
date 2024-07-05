@@ -74,11 +74,11 @@ LOGGING = {
             "handlers": [
                 "console",
             ],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
         "post_office": {
-            "level": "DEBUG",
+            "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "post_office"
         },

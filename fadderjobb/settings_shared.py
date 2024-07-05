@@ -226,7 +226,7 @@ CONSTANCE_CONFIG = {
         "Minsta antalet poäng som krävs av en fadder.",
     ),
     "PRIMARY_ADMIN_NAME": (
-        "",
+        "Oskar Arensmeier",
         "Namnet på primär admin som används som kontaktperson vid frågor om fadderjobb.",
     ),
 }

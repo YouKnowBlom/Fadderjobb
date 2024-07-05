@@ -86,8 +86,8 @@ class User(AbstractUser):
         return settings.DEFAULT_DOMAIN + local_url
 
     def send_activation_email(self):
-        #if self.is_activated:
-        #    return
+        if self.is_activated:
+            return
 
         if not self.email:
             self.email = to_student_email(self.username)
