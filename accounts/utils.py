@@ -1,7 +1,7 @@
 from .models import User
 
 def update_user_placings():
-    users = User.objects.order_by("-points").all()
+    users = User.objects.order_by("-points", "-is_staff").all()
 
     for i, user in enumerate(users):
         user.placing = i + 1

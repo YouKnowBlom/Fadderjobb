@@ -7,6 +7,6 @@ class Command(BaseCommand):
     help = 'Re-calculate points and placings for all users'
 
     def handle(self, *args, **options):
-        for user in User.objects.filter(is_staff=False).all():
+        for user in User.objects.filter().all():
             user.update_points()
         update_user_placings()
