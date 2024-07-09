@@ -70,6 +70,8 @@ def register(request):
     user = User.objects.create_user(username=username, password=password, email=to_student_email(username))
     user.save()
 
+    user.send_activation_email()
+
     return redirect("accounts:activate")
 
 
