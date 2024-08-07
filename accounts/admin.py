@@ -17,6 +17,14 @@ from fadderjobb.filters import DropdownFilterRelated
 User = get_user_model()
 
 
+def make_activated(modeladmin, request, queryset):
+    """Action for marking selected users as activate through admin panel"""
+    queryset.update(is_activated=True)
+
+
+make_activated.short_description = "Activate selected users"
+
+
 class JobsInline(admin.TabularInline):
     verbose_name = "Job"
     verbose_name_plural = "Jobs"
@@ -65,6 +73,7 @@ class BonusPointsAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     model = User
+    actions = [make_activated]
 
     exclude = ("password", "first_name", "last_name", "is_active")
 
