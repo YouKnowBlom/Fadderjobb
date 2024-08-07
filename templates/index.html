@@ -11,7 +11,7 @@
 <h1>Välkommen</h1>
 
 <p>
-    ...till STABENs fadderjobbsportal! Här kan du anmäla dig till fadderjobb, se vilka pass andra faddrar har tagit,
+...till {{ config.FADDERI }}s fadderjobbsportal! Här kan du anmäla dig till fadderjobb, se vilka pass andra faddrar har tagit,
     byta jobb med andra faddrar, och mycket mer.
 </p>
 
@@ -35,6 +35,6 @@
     och användes först till mottagningen 2019.
     Versionen du använder just nu är en vidareutveckling på detta.
     Upplever du problem med fadderjobbsportalen? Eller har du bara frågor om systemet?
-    Kontakta webbansvarig ({{ config.PRIMARY_ADMIN_NAME }}) via Slack eller <a href="mailto:web@staben.info" target="_blank">mail</a>.
+    Kontakta webbansvarig ({{ config.PRIMARY_ADMIN_NAME }}) via Slack eller <a href="mailto:{{ config.PRIMARY_ADMIN_EMAIL }}" target="_blank">mail</a>.
 </p>
 {% endblock content %}

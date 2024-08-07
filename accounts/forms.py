@@ -1,4 +1,5 @@
 import re
+from constance import config
 
 from django import forms
 
@@ -27,7 +28,7 @@ class FadderEditForm(forms.Form):
     phone_number = PhoneNumberField(
         label="Telefonnummer",
         required=False,
-        help_text="Telefonnummer som STABEN kan kontakta dig på.",
+        help_text=f"Telefonnummer som { config.FADDERI } kan kontakta dig på.",
         widget=PhoneWidget(attrs={"class": "form-control"}),
     )
 
