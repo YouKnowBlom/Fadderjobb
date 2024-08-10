@@ -1,3 +1,5 @@
+import random
+import string
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.apps import apps
@@ -7,6 +9,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.db import models
 
+from fadderjobb.utils import notify_user
 from loginas.utils import login_as
 
 from .models import BonusPoints
@@ -23,6 +26,26 @@ def make_activated(modeladmin, request, queryset):
 
 
 make_activated.short_description = "Activate selected users"
+
+
+def reset_password(modeladmin, request, queryset):
+    available_characters = string.ascii_letters + string.digits
+
+    for user in queryset:
+        new_password = "".join(
+            random.SystemRandom().choices(available_characters, k=20)
+        )
+        user.set_password(new_password)
+        notify_user(
+            user,
+            template="accounts/email/password_reset",
+            template_context=dict(
+                new_password=new_password,
+            ),
+        )
+
+
+reset_password.short_description = "Reset password"
 
 
 class JobsInline(admin.TabularInline):
