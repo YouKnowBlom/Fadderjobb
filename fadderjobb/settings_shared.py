@@ -229,6 +229,14 @@ CONSTANCE_CONFIG = {
         "Oskar Arensmeier",
         "Namnet på primär admin som används som kontaktperson vid frågor om fadderjobb.",
     ),
+    "PRIMARY_ADMIN_EMAIL": (
+        "webb@staben.info",
+        "Email till primär admin som används som kontaktperson vid frågor om fadderjobb.",
+    ),
+    "FADDERI": (
+        "STABEN",
+        "Namnet på fadderiet. Visas på ett flertal ställen på hemsidan.",
+    ),
 }
 
 # Password validation
