@@ -96,7 +96,7 @@ class BonusPointsAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     model = User
-    actions = [make_activated]
+    actions = [reset_password, make_activated]
 
     exclude = ("password", "first_name", "last_name", "is_active")
 
