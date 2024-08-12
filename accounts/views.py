@@ -159,6 +159,10 @@ def edit_profile(request):
             request.user.motto = form.cleaned_data.get("motto")
             request.user.name = form.cleaned_data.get("name")
 
+            password = form.cleaned_data.get("password")
+            if password != "":
+                request.user.set_password(password)
+
             request.user.save()
 
             messages.add_message(

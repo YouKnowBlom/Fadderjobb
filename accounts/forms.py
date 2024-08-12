@@ -40,3 +40,10 @@ class FadderEditForm(forms.Form):
             attrs={"class": "form-control motto-input", "maxlength": 100, "rows": 3}
         ),
     )
+
+    password = forms.CharField(
+        label="Nytt lösenord",
+        required=False,
+        help_text="Om du vill byta lösenord skriver du in ditt nya här.",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    )
