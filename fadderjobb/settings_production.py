@@ -6,12 +6,14 @@ SECRET_KEY_PATH = os.path.join(BASE_DIR, "fadderjobb", "secret_key.txt")
 
 load_dotenv(find_dotenv())
 
+
 def load_secret_key():
     if os.path.isfile(SECRET_KEY_PATH):
         with open(SECRET_KEY_PATH) as file:
             return file.read()
     else:
         from django.utils.crypto import get_random_string
+
         chars = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)"
         secret = get_random_string(50, chars)
 
@@ -19,6 +21,7 @@ def load_secret_key():
             file.write(secret)
 
         return secret
+
 
 SECRET_KEY = load_secret_key()
 
@@ -28,7 +31,7 @@ SECRET_KEY = load_secret_key()
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.postgresql_psycopg2"),
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
         "NAME": os.environ.get("DB_NAME", "fadderjobb"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", ""),
@@ -80,7 +83,7 @@ LOGGING = {
         "post_office": {
             "level": "INFO",
             "class": "logging.StreamHandler",
-            "formatter": "post_office"
+            "formatter": "post_office",
         },
     },
 }

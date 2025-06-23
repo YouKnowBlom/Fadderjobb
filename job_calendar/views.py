@@ -5,6 +5,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import Http404
 from django.utils.timezone import get_current_timezone
+from django.db.models import F
 
 from django_ical.views import ICalFeed
 
@@ -32,7 +33,7 @@ class JobFeed(ICalFeed):
         return super(JobFeed, self).__call__(request, *args, **kwargs)
 
     def items(self):
-        return self.user.jobs.all().order_by("-start_date")
+        return self.user.jobs.all().order_by(F("start_date").desc())
 
     def item_guid(self, item):
         url = re.compile(r"https?://(www\.)?")

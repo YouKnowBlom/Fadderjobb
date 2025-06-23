@@ -7,7 +7,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.exceptions import ValidationError
 
 from constance import config
@@ -90,7 +90,7 @@ class EnterQueue(models.Model):
 
     @classmethod
     def get_first(cls, job):
-        res = cls.objects.filter(job=job).order_by("created").first()
+        res = cls.objects.filter(job=job).order_by(F("created")).first()
 
         if not res:
             raise cls.DoesNotExist
@@ -99,7 +99,7 @@ class EnterQueue(models.Model):
 
     @classmethod
     def get_all(cls, job):
-        res = cls.objects.filter(job=job).order_by("created").all()
+        res = cls.objects.filter(job=job).order_by(F("created")).all()
 
         if not res:
             raise cls.DoesNotExist
@@ -254,7 +254,7 @@ class Job(models.Model):
     def group_by_date(queryset):
         day_grouped = OrderedDict()
 
-        for job in queryset.order_by("start_date"):
+        for job in queryset.order_by(F("start_date")):
             date = job.start_date.strftime("%d %b")
 
             if date not in day_grouped.keys():

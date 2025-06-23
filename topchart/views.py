@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from django.contrib.auth import get_user_model
+from django.db.models import F
 
 User = get_user_model()
 
@@ -9,7 +10,7 @@ def index(request):
 
     admin = request.user and request.user.is_staff
 
-    users = User.objects.order_by("placing").all()
+    users = User.objects.order_by(F("placing")).all()
 
     if search != "":
         name_filtered = users.filter(name__icontains=search)

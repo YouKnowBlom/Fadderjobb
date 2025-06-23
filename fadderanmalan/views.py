@@ -10,7 +10,7 @@ from .exceptions import UserError
 
 
 def job_list(request):
-    jobs = Job.objects.order_by("start_date").filter(~Job.is_hidden_query_filter())
+    jobs = Job.objects.order_by(F("start_date")).filter(~Job.is_hidden_query_filter())
 
     jobs = misc_utils.filter_jobs_for_user(request.user, jobs)
 
