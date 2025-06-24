@@ -5,7 +5,7 @@ from django import forms
 
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import (
-    PhoneNumberInternationalFallbackWidget as PhoneWidget,
+    RegionalPhoneNumberWidget as PhoneWidget,
 )
 
 
@@ -28,7 +28,7 @@ class FadderEditForm(forms.Form):
     phone_number = PhoneNumberField(
         label="Telefonnummer",
         required=False,
-        help_text=f"Telefonnummer som { config.FADDERI } kan kontakta dig på.",
+        help_text="Telefonnummer som fadderiet kan kontakta dig på.",
         widget=PhoneWidget(attrs={"class": "form-control"}),
     )
 
