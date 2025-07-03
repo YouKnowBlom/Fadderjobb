@@ -7,7 +7,7 @@ cffi==1.12.3
 chardet==3.0.4
 charset-normalizer==3.1.0
 cryptography # ==2.6.1 # NOTE: Removing version lock bc it fails to build on Mac M1, no idea why // ogge
-Django==2.2.4
+Django==4.2.22
 django-appconf==1.0.3
 #django-auth-adfs==1.11.6
 django-cas-client==1.5.3
