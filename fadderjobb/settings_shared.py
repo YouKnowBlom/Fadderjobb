@@ -14,9 +14,6 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from datetime import date, time, datetime
 
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -69,6 +66,10 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "post_office",
         },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+        },
     },
     "loggers": {
         "post_office": {
@@ -101,7 +102,6 @@ INSTALLED_APPS = [
     #"cas",
     "post_office",
     "constance",
-    "constance.backends.database",
     "phonenumber_field",
     "loginas",
     "fadderanmalan",
@@ -160,13 +160,15 @@ WSGI_APPLICATION = "fadderjobb.wsgi.application"
 # Crash analytics
 # https://sentry.io/
 
-if not DEBUG:
-    if os.getenv("SENTRYIO_DSN", "") != "":
-        sentry_sdk.init(
-            dsn=os.getenv("SENTRYIO_DSN", ""),
-            integrations=[DjangoIntegration()],
-            send_default_pii=True,
-        )
+if not DEBUG and os.getenv("SENTRYIO_DSN", "") != "":
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRYIO_DSN", ""),
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+    )
 
 # ADFS
 #AUTH_ADFS = {
@@ -267,8 +269,6 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Europe/Stockholm"
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 

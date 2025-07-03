@@ -20,7 +20,7 @@ class CustomModelChoiceField(forms.models.ModelMultipleChoiceField):
             return self._choices
         return CustomModelChoiceIterator(self)
 
-    choices = property(_get_choices, forms.MultipleChoiceField._set_choices)
+    choices = property(_get_choices, forms.MultipleChoiceField.choices)
 
 
 class TradeForm(forms.ModelForm):
